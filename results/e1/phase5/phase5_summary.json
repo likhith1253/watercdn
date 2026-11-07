@@ -1,0 +1,114 @@
+{
+  "test_targets_first_accessed": "2026-11-07T17:23:36",
+  "alphas": [
+    0.1,
+    0.2
+  ],
+  "delta": 0.05,
+  "resplit_summary": [
+    {
+      "alpha": 0.05,
+      "mean_harm_rate": 0.008912175436922597,
+      "mean_abstention": 0.6473749999999999,
+      "mean_utility": 0.6317433080286371,
+      "share_never_transfer": 0.52,
+      "share_splits_harm_le_alpha": 0.955
+    },
+    {
+      "alpha": 0.1,
+      "mean_harm_rate": 0.02004155420602789,
+      "mean_abstention": 0.04312500000000001,
+      "mean_utility": 1.6746837575442808,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.15,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.2,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.25,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.3,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.4,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    },
+    {
+      "alpha": 0.5,
+      "mean_harm_rate": 0.020916554206027893,
+      "mean_abstention": 0.01062500000000001,
+      "mean_utility": 1.7188357696535093,
+      "share_never_transfer": 0.0,
+      "share_splits_harm_le_alpha": 1.0
+    }
+  ],
+  "final_test": [
+    {
+      "alpha": 0.1,
+      "lambda": 0.022323966491655196,
+      "n_targets": 40,
+      "n_accepted": 39,
+      "abstention_rate": 0.025000000000000022,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 1.7431990982863916,
+      "oracle_mean_utility": 1.991312842358394,
+      "regret_to_oracle": 0.24811374407200198,
+      "share_oracle_captured": 0.8754019264104425,
+      "joint_harm_rate": 0.0,
+      "harm_rate_CP_lo": 0.0,
+      "harm_rate_CP_hi": 0.0902511009603343
+    },
+    {
+      "alpha": 0.2,
+      "lambda": 0.022323966491655196,
+      "n_targets": 40,
+      "n_accepted": 39,
+      "abstention_rate": 0.025000000000000022,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 1.7431990982863916,
+      "oracle_mean_utility": 1.991312842358394,
+      "regret_to_oracle": 0.24811374407200198,
+      "share_oracle_captured": 0.8754019264104425,
+      "joint_harm_rate": 0.0,
+      "harm_rate_CP_lo": 0.0,
+      "harm_rate_CP_hi": 0.0902511009603343
+    }
+  ],
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "f34392b14aea-dirty",
+    "config_hash": "6110ef0be8c9"
+  }
+}

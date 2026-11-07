@@ -1,0 +1,15 @@
+{
+  "n_train_pairs": 360,
+  "n_train_targets": 60,
+  "harm_share_train": 0.013888888888888888,
+  "leakage_audit_label_permuted": {
+    "spearman": 0.10414663693392696,
+    "auroc": 0.09183098591549296
+  },
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "f34392b14aea-dirty",
+    "config_hash": "6110ef0be8c9"
+  }
+}

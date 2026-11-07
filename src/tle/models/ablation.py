@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from scipy.stats import spearmanr
-from sklearn.metrics import brier_score_loss, roc_auc_score
+from scipy.stats import rankdata, spearmanr
+from sklearn.metrics import roc_auc_score
 
 from ..features.tiers import tier_columns
 from .predictors import HarmModel, UtilityModel, grouped_folds
@@ -54,23 +54,54 @@ def oof_predictions(df: pd.DataFrame, cols: list[str], kind_u: str = "lgbm", kin
     return out
 
 
+def _arrays(o: pd.DataFrame) -> dict:
+    return {"u": o.u_mean.to_numpy(float), "U": o.U.to_numpy(float), "p": np.clip(o.p_harm.to_numpy(float), 0, 1),
+            "h": o.harm.to_numpy(int), "q10": o.u_q10.to_numpy(float)}
+
+
+def _spearman(a: np.ndarray, b: np.ndarray) -> float:
+    ra, rb = rankdata(a), rankdata(b)
+    if ra.std() == 0 or rb.std() == 0:
+        return 0.0
+    return float(np.corrcoef(ra, rb)[0, 1])
+
+
+def _auroc(p: np.ndarray, h: np.ndarray) -> float:
+    n1 = int(h.sum())
+    n0 = len(h) - n1
+    if n1 == 0 or n0 == 0 or np.ptp(p) == 0:
+        return 0.5
+    r = rankdata(p)
+    return float((r[h == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
+
+
+def _metrics_arr(A: dict, idx: np.ndarray | None = None) -> dict:
+    g = A if idx is None else {k: v[idx] for k, v in A.items()}
+    return {"spearman": _spearman(g["u"], g["U"]), "mae": float(np.mean(np.abs(g["u"] - g["U"]))),
+            "auroc": _auroc(g["p"], g["h"]), "brier": float(np.mean((g["p"] - g["h"]) ** 2)),
+            "q10_coverage": float(np.mean(g["U"] >= g["q10"]))}
+
+
 def metrics(o: pd.DataFrame) -> dict:
-    sp = spearmanr(o.u_mean, o.U).statistic if o.u_mean.nunique() > 1 else 0.0
-    auc = roc_auc_score(o.harm, o.p_harm) if o.harm.nunique() > 1 and o.p_harm.nunique() > 1 else 0.5
-    return {"spearman": float(sp), "mae": float(np.mean(np.abs(o.u_mean - o.U))), "auroc": float(auc),
-            "brier": float(brier_score_loss(o.harm, np.clip(o.p_harm, 0, 1))),
-            "q10_coverage": float(np.mean(o.U >= o.u_q10))}
+    """Spearman of predicted vs measured utility, MAE, AUROC and Brier score of harm, 10%-quantile coverage."""
+    return _metrics_arr(_arrays(o))
+
+
+def _target_rows(o: pd.DataFrame) -> tuple[np.ndarray, list[np.ndarray]]:
+    tids = o.target_id.to_numpy()
+    uniq = np.unique(tids)
+    return uniq, [np.flatnonzero(tids == t) for t in uniq]
 
 
 def bootstrap_metrics(o: pd.DataFrame, n: int, rng: np.random.Generator) -> pd.DataFrame:
     """Bootstrap over targets (all rows of a resampled target come together)."""
-    by_t = {t: g for t, g in o.groupby("target_id")}
-    tids = np.array(list(by_t))
-    rows = []
+    A = _arrays(o)
+    uniq, rows = _target_rows(o)
+    out = []
     for _ in range(n):
-        pick = rng.choice(tids, size=len(tids), replace=True)
-        rows.append(metrics(pd.concat([by_t[t] for t in pick], ignore_index=True)))
-    return pd.DataFrame(rows)
+        pick = rng.integers(0, len(uniq), len(uniq))
+        out.append(_metrics_arr(A, np.concatenate([rows[i] for i in pick])))
+    return pd.DataFrame(out)
 
 
 def summarise(name: str, o: pd.DataFrame, n_boot: int, rng: np.random.Generator) -> dict:
@@ -84,17 +115,17 @@ def summarise(name: str, o: pd.DataFrame, n_boot: int, rng: np.random.Generator)
 
 def paired_difference(o1: pd.DataFrame, o2: pd.DataFrame, metric: str, n: int,
                       rng: np.random.Generator) -> tuple[float, float, float]:
-    """Bootstrap CI over targets of metric(o1) - metric(o2) (same targets in both)."""
-    t1 = {t: g for t, g in o1.groupby("target_id")}
-    t2 = {t: g for t, g in o2.groupby("target_id")}
-    tids = np.array(list(t1))
+    """Bootstrap CI over targets of metric(o1) - metric(o2); rows must be aligned (same pairs, same order)."""
+    if not np.array_equal(o1.pair_id.to_numpy(), o2.pair_id.to_numpy()):
+        o2 = o2.set_index("pair_id").loc[o1.pair_id].reset_index()
+    A1, A2 = _arrays(o1), _arrays(o2)
+    uniq, rows = _target_rows(o1)
     d = []
     for _ in range(n):
-        pick = rng.choice(tids, size=len(tids), replace=True)
-        a = metrics(pd.concat([t1[t] for t in pick]))[metric]
-        b = metrics(pd.concat([t2[t] for t in pick]))[metric]
-        d.append(a - b)
-    full = metrics(o1)[metric] - metrics(o2)[metric]
+        pick = rng.integers(0, len(uniq), len(uniq))
+        idx = np.concatenate([rows[i] for i in pick])
+        d.append(_metrics_arr(A1, idx)[metric] - _metrics_arr(A2, idx)[metric])
+    full = _metrics_arr(A1)[metric] - _metrics_arr(A2)[metric]
     return float(full), float(np.quantile(d, 0.025)), float(np.quantile(d, 0.975))
 
 
