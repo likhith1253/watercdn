@@ -1,0 +1,3 @@
+method,alpha,lambda,n_targets,n_accepted,abstention_rate,harm_rate_among_accepted,n_harm_accepted,mean_utility,oracle_mean_utility,regret_to_oracle,share_oracle_captured,joint_harm_rate,harm_CP_lo,harm_CP_hi
+retrained gate a=0.10,0.1,,20,0,1.0,0.0,0,0.0,2.221473211780868,2.221473211780868,0.0,0.0,0.0,1.0
+retrained gate a=0.20,0.2,,20,0,1.0,0.0,0,0.0,2.221473211780868,2.221473211780868,0.0,0.0,0.0,1.0

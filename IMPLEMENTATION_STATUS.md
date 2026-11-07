@@ -18,7 +18,12 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 | E2 goal change, E3 layout change | complete | `results/e2/phase7`, `results/e3/phase7` |
 | E4 held-out L-Town | complete (lean design, D-013) | `results/e4/` (240 pairs; frozen, recalibrated, retrained gates) |
 | Sensitivity (ε, k, ρ, B), amortisation, report | complete | `results/e1/sensitivity`, `results/e1/reports`, `RESULTS.md`; 700/700 cross-check runs identical |
-| Manuscript (Phase 9) | not started (out of scope of the build) | figures and tables are generated for it |
+| GA optimiser-robustness check | complete | `results/e1/ga_check/` (D-016) |
+| L-Town extension (70 calibration targets) | complete | `results/e4x/` (D-020) |
+| v2: shift-aware gate, pooled calibration, trajectory monitoring | complete | `results/v2/V2_RESULTS.md`, `results/e*/v2/`; 4 tests (D-018–D-020) |
+| Manuscript (Phase 9) | full draft | `paper/manuscript.md` (authors, AI statement and venue template to be added) |
+| Official BCKT MATLAB run | not done | MATLAB batch error in this environment (D-017) |
+| Zenodo DOI, second-machine reproduction | owner steps | `docs/release.md` |
 
 ## Phase gates
 
@@ -45,13 +50,20 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 
 ## Contributions — what the data support
 
-* C1 paired matched-budget utility dataset: delivered (E1–E4, 2 340 pairs, released tables).
+* C1 paired matched-budget utility dataset: delivered (E1–E4, 2 460 pairs, released tables).
 * C2 risk-controlled gate: valid where harm is rare (E1, E2); breaks under layout shift (E3); certification
   impossible with 30 calibration targets when harm is ~17% (E4).
 * C3 hydraulic signatures: narrowed — tier c adds modest predictive value; trajectory summaries do not.
 * C4 zero-shot vs probe: the probe improves prediction (M6 − M5 +0.09) but changes no E1 decision.
 * C5 benchmark + break-even: benchmark released; the labelled library does not amortise in this cheap-simulation
   setting (break-even ~5 800 tasks).
+
+## v2 outcomes (pre-stated success criteria in docs/v2_plan.md)
+
+* V2-B shift-aware gate: **met** — E3 level-3 harm 23% → 0% by abstaining; unchanged decisions on unshifted E1.
+* V2-C pooled calibration: **not met** — L-Town still cannot be certified; pooling is rejected by the shift-aware test.
+* V2-A trajectory monitoring: **not met** — no utility gain over "never abort"; reported as a negative result.
+* Additional finding: the transfer benefit/harm balance depends on the optimiser (GA vs DE, D-016).
 
 ## Known limitations
 

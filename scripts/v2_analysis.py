@@ -20,7 +20,8 @@ from tle.models.ablation import design, model_specs
 from tle.models.fit import fit_predict, predict_with
 from tle.models.gate import choose_threshold, decide, evaluate_decisions, oracle_utility, top_source
 from tle.seeds import rng
-from tle.v2.monitor import CHECKPOINTS, evaluate_monitor, fresh_progress, monitor_rows, score_monitor
+from tle.v2.monitor import (CHECKPOINTS, evaluate_fixed, evaluate_monitor, fresh_progress, monitor_rows,
+                            score_monitor, utility_threshold)
 from tle.v2.shift import domain_weights, weighted_threshold
 
 N_SPLITS = 200
@@ -56,6 +57,9 @@ def run_monitor(cfg_path: str) -> None:
             sel = score_monitor(mon, df, pred, cols, g, seed, use_pair_features=use_pf)
             res, per_t = evaluate_monitor(sel, cal_ids, test_ids, alpha, delta)
             final.append({"experiment": cfg["experiment"], "variant": variant, "g": g, "alpha": alpha, **res})
+            ex = evaluate_fixed(sel, test_ids, utility_threshold(sel, cal_ids))
+            final.append({"experiment": cfg["experiment"], "variant": variant + " | utility-tuned (no guarantee)",
+                          "g": g, **ex})
             r = rng(seed, "resplit", 200 + g)
             for s in range(N_SPLITS):
                 perm = r.permutation(pool)

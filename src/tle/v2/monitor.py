@@ -142,3 +142,24 @@ def evaluate_monitor(sel: pd.DataFrame, cal_ids, test_ids, alpha: float, delta: 
             "harm_rate_no_monitor": float(te.harm_continue.mean()),
             "mean_U": float(per_t.U.mean()), "mean_U_no_monitor": float(per_t.U_no_monitor.mean()),
             "oracle_repeat_U": float(best.groupby(te.target_id).mean().mean())}, per_t
+
+
+def utility_threshold(sel: pd.DataFrame, cal_ids) -> float:
+    """Exploratory, no guarantee: abort threshold that maximises mean realised utility on calibration targets."""
+    cal = sel[sel.target_id.isin(set(cal_ids))]
+    cands = np.r_[np.unique(cal.p), np.inf]
+    best, best_u = np.inf, -np.inf
+    for lam in cands:
+        u = np.where(cal.p <= lam, cal.U_continue, cal.U_abort).mean()
+        if u > best_u:
+            best, best_u = float(lam), float(u)
+    return best
+
+
+def evaluate_fixed(sel: pd.DataFrame, test_ids, lam: float) -> dict:
+    te = sel[sel.target_id.isin(set(test_ids))]
+    cont = (te.p <= lam).to_numpy()
+    U = np.where(cont, te.U_continue, te.U_abort)
+    return {"lambda": lam, "abort_rate": float(1 - cont.mean()), "mean_U": float(pd.Series(U).groupby(
+        te.target_id.to_numpy()).mean().mean()), "harm_rate_among_continued": float(te.harm_continue[cont].mean())
+        if cont.any() else 0.0, "mean_U_no_monitor": float(te.groupby("target_id").U_continue.mean().mean())}

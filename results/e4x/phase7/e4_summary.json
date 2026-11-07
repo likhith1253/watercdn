@@ -1,0 +1,107 @@
+{
+  "retrained_gate": [
+    {
+      "method": "retrained gate a=0.10",
+      "alpha": 0.1,
+      "lambda": null,
+      "n_targets": 20,
+      "n_accepted": 0,
+      "abstention_rate": 1.0,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.0,
+      "oracle_mean_utility": 2.221473211780868,
+      "regret_to_oracle": 2.221473211780868,
+      "share_oracle_captured": 0.0,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 1.0
+    },
+    {
+      "method": "retrained gate a=0.20",
+      "alpha": 0.2,
+      "lambda": null,
+      "n_targets": 20,
+      "n_accepted": 0,
+      "abstention_rate": 1.0,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.0,
+      "oracle_mean_utility": 2.221473211780868,
+      "regret_to_oracle": 2.221473211780868,
+      "share_oracle_captured": 0.0,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 1.0
+    }
+  ],
+  "lookup_baselines": [
+    {
+      "method": "B0 fresh",
+      "mean_U": 0.0,
+      "harm_rate_all": 0.0,
+      "abstention": 1.0,
+      "oracle_mean_U": 2.221473211780868
+    },
+    {
+      "method": "B1 nearest",
+      "mean_U": 0.7937894333504046,
+      "harm_rate_all": 0.15,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.221473211780868
+    },
+    {
+      "method": "B2 similarity top-1",
+      "mean_U": 1.2984371230643705,
+      "harm_rate_all": 0.1,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.221473211780868
+    },
+    {
+      "method": "B5 historical",
+      "mean_U": 0.7718775926595585,
+      "harm_rate_all": 0.1,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.221473211780868
+    },
+    {
+      "method": "M5 retrained ungated",
+      "mean_U": 1.606381423931893,
+      "harm_rate_all": 0.05,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.221473211780868
+    }
+  ],
+  "library_size": [
+    {
+      "library_size": 5,
+      "draw": 99.5,
+      "mean_utility_gate": 0.0,
+      "oracle_mean_utility": 0.9641359533897801
+    },
+    {
+      "library_size": 10,
+      "draw": 99.5,
+      "mean_utility_gate": 0.0,
+      "oracle_mean_utility": 1.5700944013323235
+    },
+    {
+      "library_size": 15,
+      "draw": 99.5,
+      "mean_utility_gate": 0.0,
+      "oracle_mean_utility": 1.949365709653736
+    },
+    {
+      "library_size": 20,
+      "draw": 0.0,
+      "mean_utility_gate": 0.0,
+      "oracle_mean_utility": 2.221473211780868
+    }
+  ],
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "76d1e4c395f7-dirty",
+    "config_hash": "150e556ae5a6"
+  }
+}

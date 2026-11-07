@@ -85,6 +85,25 @@ signed, matched-budget utility. Gradient-boosted predictors trained on scenario,
 features estimate a utility lower bound and a harm probability; the gate transfers from the best-ranked source only
 if its harm probability is below a threshold certified by Learn-then-Test on calibration targets.
 
+## v2: trajectory-monitored and shift-aware decisions
+
+v1 showed where decide-once transfer fails (rare harm on Net3/DE, broken guarantee under layout shift, no
+certification on a new network with few calibration cases). v2 ([docs/v2_plan.md](docs/v2_plan.md)) adds:
+
+* **trajectory monitoring** (`src/tle/v2/monitor.py`): continue or abort a warm start after g generations, comparing
+  the warm run's progress with the expected fresh trajectory; exact offline evaluation from logged runs;
+* **shift-aware gate** (`src/tle/v2/shift.py`): density-ratio-weighted Learn-then-Test with an effective sample size
+  that collapses (→ abstain) when calibration and new targets do not overlap;
+* **pooled cross-network learning and calibration** (Net3 + L-Town);
+* an optimiser-robustness check with a genetic algorithm (`scripts/ga_check.py`) and 40 extra L-Town calibration
+  targets (`configs/e4x.yaml`).
+
+```bash
+.venv/Scripts/python scripts/v2_analysis.py monitor --config configs/e4x.yaml
+.venv/Scripts/python scripts/v2_analysis.py shift
+.venv/Scripts/python scripts/v2_analysis.py pooled
+```
+
 ## Repository layout
 
 ```
