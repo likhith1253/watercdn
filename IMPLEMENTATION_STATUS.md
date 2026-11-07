@@ -78,3 +78,15 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 * Simulations are cheap (ms), so savings are reported in evaluations, not wall-clock of expensive simulators.
 * Raw job files of an early commit range were committed by mistake (wrong ignore pattern) and later untracked;
   they remain in git history because history is not rewritten.
+
+## Resume point (2026-11-08 00:20)
+
+* In progress: 60 extra L-Town training targets (`configs/e4y.yaml`), 659 of 720 target jobs done; resumable.
+* Resume with:
+  1. `.venv/Scripts/python scripts/run_campaign.py --config configs/e4y.yaml` (skips finished jobs)
+  2. `.venv/Scripts/python scripts/build_tables.py --config configs/e4y.yaml --dictionary results/e4y/data_dictionary.md`
+  3. `.venv/Scripts/python scripts/ltown_gate.py --config configs/e4y.yaml` (pooled / L-Town-only / hybrid gate)
+  4. update `paper/manuscript.md`, `results/v2/V2_RESULTS.md`, docs; commit and push.
+* Finding so far (`results/e4x/gate/`): with Net3 + L-Town pooled training the gate certifies on L-Town for the
+  first time (α = 0.20: 14/20 accepted, harm 7.1% vs 15% ungated; ≤ α in 92% of 200 re-splits), but the pooled
+  model ranks sources worse than the L-Town-only model (ungated U 1.35 vs 1.61).

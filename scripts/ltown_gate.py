@@ -44,9 +44,15 @@ def main() -> None:
     rows, rs_all = [], []
     for model in ("M5", "M6"):
         cols = model_specs(d4)[model]
+        preds = {}
         for tname, train in (("L-Town train only", d4[d4.split == "train"]),
                              ("Net3 all + L-Town train", pd.concat([d1, d4[d4.split == "train"]]))):
-            pred, _, _ = fit_predict(train, d4[d4.split != "train"], cols, seed)
+            preds[tname] = fit_predict(train, d4[d4.split != "train"], cols, seed)[0]
+        # hybrid: utility ranking from the in-network model, harm probability from the pooled model
+        hyb = preds["L-Town train only"].drop(columns=["p_harm"]).merge(
+            preds["Net3 all + L-Town train"][["pair_id", "p_harm"]], on="pair_id")
+        preds["hybrid: rank L-Town, harm pooled"] = hyb
+        for tname, pred in preds.items():
             pred = pred.merge(d4[["pair_id", "a_scenario_distance", "c_state_cosine"]], on="pair_id")
             top = top_source(pred)
             tc, tt = top[top.split == "calibration"], top[top.split == "test"].reset_index(drop=True)
