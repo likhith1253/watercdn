@@ -25,6 +25,7 @@ from ..config import provenance
 from ..hydraulics.scenario import Scenario
 from ..scenarios.generator import to_scenario
 from ..seeds import run_streams, seed_sequence
+from .ga import run_ga
 from .optimizer import Evaluator, initial_population, run_de
 from .records import hydraulic_signature, run_summary
 from .runner import de_settings, get_simulator, parallel_map
@@ -54,9 +55,9 @@ class RunOutput:
     final_fit: np.ndarray
 
 
-def _execute(ev: Evaluator, pop0: np.ndarray, r_de, N, F, CR) -> RunOutput:
+def _execute(ev: Evaluator, pop0: np.ndarray, r_de, N, F, CR, optimizer: str = "de") -> RunOutput:
     t0 = time.perf_counter()
-    out = run_de(ev, N, F, CR, pop0, r_de)
+    out = run_ga(ev, N, pop0, r_de) if optimizer == "ga" else run_de(ev, N, F, CR, pop0, r_de)
     wall = time.perf_counter() - t0
     summ = run_summary(ev, out)
     summ["wall_s"] = wall
@@ -73,7 +74,7 @@ def library_job(cfg: dict, row: pd.Series) -> dict:
     ss = seed_sequence(cfg["seed"], *key)
     r_init, r_de, _ = run_streams(ss)
     ev = Evaluator(sim, sc, B)
-    run = _execute(ev, initial_population(sim.lo, sim.hi, N, r_init), r_de, N, F, CR)
+    run = _execute(ev, initial_population(sim.lo, sim.hi, N, r_init), r_de, N, F, CR, cfg.get("optimizer", "de"))
     return {
         "scenario": sc.to_dict(),
         "seed_key": [int(cfg["seed"]), *key],
@@ -119,12 +120,13 @@ def paired_runs(cfg: dict, target: Scenario, ss: np.random.SeedSequence, sources
     def inj_stream():
         return run_streams(ss)[2]
 
-    runs = {"fresh": _execute(Evaluator(sim, target, B), pop0, de_stream(), N, F, CR)}
+    opt = cfg.get("optimizer", "de")
+    runs = {"fresh": _execute(Evaluator(sim, target, B), pop0, de_stream(), N, F, CR, opt)}
     for sid, elites in sources.items():
         pop_w = inject_elites(pop0, elites, float(t["rho"]), float(t["sigma_frac"]), sim.lo, sim.hi, inj_stream())
-        runs[f"warm:{sid}"] = _execute(Evaluator(sim, target, B), pop_w, de_stream(), N, F, CR)
+        runs[f"warm:{sid}"] = _execute(Evaluator(sim, target, B), pop_w, de_stream(), N, F, CR, opt)
     for name, init in (extra_inits or {}).items():
-        runs[name] = _execute(Evaluator(sim, target, B), init(pop0, inj_stream()), de_stream(), N, F, CR)
+        runs[name] = _execute(Evaluator(sim, target, B), init(pop0, inj_stream()), de_stream(), N, F, CR, opt)
     return {"runs": runs, "m_injected": n_injected(N, float(t["rho"]))}
 
 

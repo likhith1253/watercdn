@@ -1,0 +1,22 @@
+{
+  "n_pairs": 120,
+  "GA": {
+    "mean_U": 0.4356801931306448,
+    "share_helpful": 0.475,
+    "share_harmful": 0.13333333333333333,
+    "mean_TG": 0.35161302116179427
+  },
+  "DE": {
+    "mean_U": 1.510559487883372,
+    "share_helpful": 0.8166666666666667,
+    "share_harmful": 0.016666666666666666,
+    "mean_TG": 0.5857679566213745
+  },
+  "spearman_U_ga_vs_de": 0.07518577679005485,
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "7e61b6e732c0-dirty",
+    "config_hash": "af432113ff99"
+  }
+}

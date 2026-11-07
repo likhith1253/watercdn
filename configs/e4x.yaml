@@ -1,0 +1,12 @@
+# E4 extension: 40 extra L-Town calibration targets (70 in total); same runs directory, finished jobs are reused.
+extends: [configs/e4.yaml]
+scenarios:
+  table: data/scenarios/e4x_scenarios.csv
+  pairs: data/scenarios/e4x_pairs.csv
+  manifest: data/scenarios/e4x_manifest.json
+extension:
+  base_table: data/scenarios/e4_scenarios.csv
+  base_pairs: data/scenarios/e4_pairs.csv
+  n_extra_calibration: 40
+  id_start: 1000
+results_dir: results/e4x
