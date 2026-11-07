@@ -1,0 +1,33 @@
+{
+  "experiment": "E4",
+  "master_seed": 20261108,
+  "sampler": "scrambled Sobol (continuous factors) + zone-stratified leak node",
+  "split_sizes": {
+    "library": 20,
+    "train": 30,
+    "calibration": 30,
+    "test": 20
+  },
+  "scenario_table_sha256": "2ae29ea988592e298af783caf1eb1131793a0359c03926b56166c87106117e54",
+  "pair_manifest_sha256": "21adb8bfcbb909796afabf25b8dc5997f4dcb87e8e3aec6ce96443fc26f23437",
+  "config_hash": "ad5916acf824",
+  "zone_counts_by_split": {
+    "PRV-3": {
+      "calibration": 9,
+      "library": 6,
+      "test": 6,
+      "train": 9
+    },
+    "main": {
+      "calibration": 21,
+      "library": 14,
+      "test": 14,
+      "train": 21
+    }
+  },
+  "pairs_per_split": {
+    "train": 90,
+    "calibration": 90,
+    "test": 60
+  }
+}

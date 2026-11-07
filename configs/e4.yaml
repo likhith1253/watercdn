@@ -13,7 +13,7 @@ splits:
   calibration: 30
   test: 20
 pairs:
-  per_distance_tertile: 2   # S = 6
+  per_distance_tertile: 1   # S = 3 (lean, compute-driven: B = 1000 on L-Town; decision D-013)
   repeats: 4
   test_repeats: 4
 de:
@@ -37,3 +37,4 @@ gate:
   delta: 0.05
 frozen_gate: results/e1/models/gate_M5.joblib
 results_dir: results/e4
+reference_attain_factor: 2   # attainability runs of 2B (lean, D-013)

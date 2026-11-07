@@ -51,7 +51,8 @@ def main() -> None:
     if "reference" in args.stages:
         t0 = time.time()
         sel = scen if not args.targets else scen[scen.scenario_id.isin(set(args.targets) | set(pairs.source_id))]
-        jobs = [(root / "reference" / f"{r.scenario_id}.joblib", reference_job, (cfg, r)) for _, r in sel.iterrows()]
+        af = int(cfg.get("reference_attain_factor", 5))
+        jobs = [(root / "reference" / f"{r.scenario_id}.joblib", reference_job, (cfg, r, af)) for _, r in sel.iterrows()]
         print("reference jobs run:", run_jobs(jobs, args.jobs), f"({time.time() - t0:.0f}s)")
 
     if "pairs" in args.stages:

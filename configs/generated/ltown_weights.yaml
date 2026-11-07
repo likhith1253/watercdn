@@ -1,0 +1,36 @@
+weights:
+  leak: 0.000665682425426814
+  energy: 0.10122344264318073
+  shortfall: 1.5530175121926917
+  tank: 0.18546993491564848
+stats:
+  n_samples: 200
+  n_failed: 0
+  median_leak_m3: 1502.2178170902325
+  median_energy_cost: 9.879134456284653
+  median_shortfall_mh: 4.49488037353164
+  median_tank_deficit_m3: 0.0
+  operating_range_R: 0.9273496745782424
+  q10_violating_shortfall_mh: 1.1942552705267637
+  q10_violating_tank_deficit_m3: 10.0
+  n_violating_shortfall: 129
+  n_violating_tank: 0
+  share_feasible: 0.355
+base_scenario:
+  scenario_id: base
+  network: ltown_prv
+  leak_node: n579
+  leak_area_m2: 0.0007745966692414834
+  demand_mult: 1.0
+  peak_shift_h: 0
+  pattern_amp: 1.0
+  tank_level_frac: 0.55
+  closed_pipes: []
+  required_pressure_m: 20.0
+  energy_weight_mult: 1.0
+seed: 20261107
+provenance:
+  wntr_version: 1.5.0
+  epanet_version: 2.2 (bundled with WNTR)
+  git_commit: 105d545950a0-dirty
+  config_hash: f8c9a14930d2

@@ -1,0 +1,42 @@
+de_grid: null
+tuning_budget: null
+tuning_scenarios: []
+seeds_per_scenario: 5
+scores: []
+chosen:
+  F: 0.4
+  CR: 0.5
+  N: 20
+budget_rule:
+  candidates:
+  - 300
+  - 400
+  - 600
+  - 800
+  - 1000
+  - 1200
+  - 1500
+  band:
+  - 0.03
+  - 0.2
+  scenarios:
+  - e4_0017
+  - e4_0048
+  - e4_0007
+  - e4_0029
+  - e4_0033
+  median_regret:
+    300: 0.3141014725327008
+    400: 0.2700381196150238
+    600: 0.1692706675126882
+    800: 0.10881060210556551
+    1000: 0.06316038407625979
+    1200: 0.04221717924857789
+    1500: 0.0263933227081718
+  chosen_B: 1000
+  feasible_share_at_5Bmax: 1.0
+provenance:
+  wntr_version: 1.5.0
+  epanet_version: 2.2 (bundled with WNTR)
+  git_commit: e8f222c9eb01-dirty
+  config_hash: d08743e4c245

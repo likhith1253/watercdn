@@ -1,0 +1,18 @@
+{
+  "reference_method": "B6 gate a=0.20",
+  "friedman": {
+    "statistic": 222.53985706432113,
+    "pvalue": 1.5264694462840048e-41,
+    "k": 12,
+    "n": 40
+  },
+  "n_test_targets": 40,
+  "pmto_task_model_training_tasks": 28,
+  "bckt_mean_transfers_per_run": 3.91,
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "e8f222c9eb01-dirty",
+    "config_hash": "6110ef0be8c9"
+  }
+}

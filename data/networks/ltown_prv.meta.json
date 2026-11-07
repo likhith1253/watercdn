@@ -3,7 +3,7 @@
   "source": "BattLeDIM L-TOWN_v2_Model.inp (EUPL-1.2)",
   "source_url": "https://media.githubusercontent.com/media/KIOS-Research/BattLeDIM/master/Dataset%20Generator/L-TOWN_v2_Model.inp",
   "source_sha256": "1b9ba161e3aebe02a916876d60c2126ee76f75e9f0d23c9ec4dfffd59cc0c366",
-  "inp_sha256": "d2b7ad0ef157fd68df8d81b364cee73bd15194f67f26fe134153415a1324499d",
+  "inp_sha256": "698e364d65d808c7bc7d1647230ed561678bb9965087ba500ec8de80a5dd1837",
   "wntr_version": "1.5.0",
   "edits": {
     "controls_removed": true,
