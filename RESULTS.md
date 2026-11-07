@@ -133,6 +133,26 @@ Utilities are in units of the fresh-run seed standard deviation (σ_fresh); posi
 | 2 | 180 | 0.133 | 0.383 | 0.284 | 0.446 | 1.180 |
 | 3 | 180 | 0.178 | 0.067 | 0.117 | 0.568 | 1.760 |
 
+## E4: frozen E1 gate on shifted targets
+
+| group | lambda_source | alpha | n_targets | n_accepted | harm_rate_among_accepted | harm_CP_hi | abstention_rate | mean_utility | share_oracle_captured |
+|---|---|---|---|---|---|---|---|---|---|
+| all | frozen E1 | 0.100 | 20 | 20 | 0.050 | 0.249 | 0.000 | 1.468 | 0.661 |
+| all | recalibrated | 0.100 | 20 | 0 | 0.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+| all | frozen E1 | 0.200 | 20 | 20 | 0.050 | 0.249 | 0.000 | 1.468 | 0.661 |
+| all | recalibrated | 0.200 | 20 | 0 | 0.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+
+| group | n_pairs | harm_share | U_mean | spearman | auroc | mae |
+|---|---|---|---|---|---|---|
+| all | 240 | 0.167 | 0.555 | 0.080 | 0.554 | 1.706 |
+
+## E4: gate retrained on L-Town
+
+| method | lambda | n_targets | n_accepted | harm_rate_among_accepted | abstention_rate | mean_utility | share_oracle_captured |
+|---|---|---|---|---|---|---|---|
+| retrained gate a=0.10 |  | 20 | 0 | 0.000 | 1.000 | 0.000 | 0.000 |
+| retrained gate a=0.20 |  | 20 | 0 | 0.000 | 1.000 | 0.000 | 0.000 |
+
 ## T4 sensitivity (no retuning)
 
 | factor | value | harm_share_all_pairs | lambda | n_accepted | harm_rate_among_accepted | abstention_rate | mean_utility | mean_U | share_helpful | share_harmful | mean_TG | spearman_vs_base |

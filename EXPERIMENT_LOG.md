@@ -76,3 +76,13 @@ break-even after ~5,800 / ~13,500 future tasks.
 
 ### E4 L-Town
 Budget rule chose B = 1000 (median regret 6.3%). Lean design S = 3, R = 4, attainability 2B (D-013).
+240 pairs on 80 targets: helpful 60.0%, neutral 23.3%, harmful 16.7% (meets the Phase 3 class-balance gate that E1
+failed); mean U 0.55, spread 2.50. Frozen E1 predictor Spearman 0.08 (does not transfer across networks); frozen
+E1 gate (accepts all): 1/20 harmful, mean U 1.47, 66% of oracle. Recalibrated (30 L-Town calibration targets) and
+retrained (30 training targets) gates cannot certify α ≤ 0.20 and abstain on every test target (few-shot curve:
+never transfers for m ≤ 30 at α = 0.10; ≥ 92% never-transfer at α = 0.20). Retrained ungated M5 ranking: mean U
+1.61 (72% of oracle), 5% harmful; B2 similarity 1.30, B1 nearest 0.79, B5 historical 0.77. Oracle utility grows
+with library size (5 → 20 runs: 0.96 → 2.22).
+
+### Timing (`docs/timing.md`, idle machine)
+Median seconds per evaluation: Net3-PRV 0.0036 s (WNTR EpanetSimulator 0.097 s per run); L-Town-PRV (782 junctions) 0.028 s (WNTR 0.43 s).

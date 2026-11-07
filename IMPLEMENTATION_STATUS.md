@@ -14,10 +14,10 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 | Labels, tables, features (tiers a–d), data dictionary | complete | `results/*/tables`, `docs/data_dictionary.md` |
 | Predictors, ablation M0–M6, order test, leakage audit | complete | `results/e1/phase4/` |
 | Learn-then-Test gate, re-splits, operator check, probe mode | complete | `results/e1/phase5/`; 4 gate tests |
-| Baselines B0–B7 + oracle (SEETO-, BCKT-, PMTO-style) | complete (code); test runs executing | `results/e1/phase6/` |
+| Baselines B0–B7 + oracle (SEETO-, BCKT-, PMTO-style) | complete | `results/e1/phase6/` (400 run-based baseline runs) |
 | E2 goal change, E3 layout change | complete | `results/e2/phase7`, `results/e3/phase7` |
-| E4 held-out L-Town | running | `results/e4/` |
-| Sensitivity (ε, k, ρ, B), amortisation, report | code complete; runs after E4 | `results/e1/sensitivity`, `RESULTS.md` |
+| E4 held-out L-Town | complete (lean design, D-013) | `results/e4/` (240 pairs; frozen, recalibrated, retrained gates) |
+| Sensitivity (ε, k, ρ, B), amortisation, report | complete | `results/e1/sensitivity`, `results/e1/reports`, `RESULTS.md`; 700/700 cross-check runs identical |
 | Manuscript (Phase 9) | not started (out of scope of the build) | figures and tables are generated for it |
 
 ## Phase gates
@@ -30,7 +30,28 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 | P3 helpful and harmful ≥ 15% each | **failed for harm: 2.9% harmful** (helpful 80.4%) — "transfer almost always helps" branch (D-011) |
 | P4 leakage audit; tier comparison with CIs | passed; C3 kept in narrowed form (D-012) |
 | P5 harm ≤ α in ≥ 90% of re-splits; gate sometimes transfers | passed (100% at α ≥ 0.10; 95.5% at α = 0.05), but trivially because harm is rare |
-| P7 E2–E4 ran with CIs | E2, E3 done; E4 running |
+| P6 every baseline end to end, adaptation log | passed (`docs/baselines.md`) |
+| P7 E2–E4 ran with CIs | passed: E2, E3, E4 and sensitivity ran |
+| P8 headline table reproduces; numbers traceable | `RESULTS.md` generated from result files; cross-check identical; a run on a second machine was not possible here |
+
+## Hypotheses (pre-registered) — outcome
+
+| H | Outcome |
+|---|---|
+| H1 M5 > M2 and > M1 (Spearman) | supported: +0.070 [0.003, 0.148] and +0.53 [0.36, 0.68] |
+| H2 harm ≤ α in ≥ 90% of re-splits | supported on E1 (100% for α ≥ 0.10), but with only 2.9% harmful pairs |
+| H3 B6 > B1, B2, B4, B5 | partly: > B1, B4, B3 (Holm p ≤ 0.039); not distinguishable from B2, B2γ, B5 |
+| H4 control degrades with layout shift, restored by recalibration | degradation supported (E3: realised harm 23% > α at 3 closures; E4 predictor ρ 0.08); restoration **not** supported — with ≤ 30 new calibration targets the recalibrated gate cannot certify and abstains |
+
+## Contributions — what the data support
+
+* C1 paired matched-budget utility dataset: delivered (E1–E4, 2 340 pairs, released tables).
+* C2 risk-controlled gate: valid where harm is rare (E1, E2); breaks under layout shift (E3); certification
+  impossible with 30 calibration targets when harm is ~17% (E4).
+* C3 hydraulic signatures: narrowed — tier c adds modest predictive value; trajectory summaries do not.
+* C4 zero-shot vs probe: the probe improves prediction (M6 − M5 +0.09) but changes no E1 decision.
+* C5 benchmark + break-even: benchmark released; the labelled library does not amortise in this cheap-simulation
+  setting (break-even ~5 800 tasks).
 
 ## Known limitations
 
