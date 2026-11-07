@@ -19,6 +19,7 @@ RULES = [
     (r"^U_raw$", "mean(Q_fresh - Q_warm), not normalised", "J", "paired runs", False),
     (r"^harm$", "1 if U < -epsilon", "-", "paired runs", False),
     (r"^anytime_U$", "area between mean best-so-far curves (fresh - warm) / (B sigma_fresh)", "-", "paired runs", False),
+    (r"^anytime_U_post_gen0$", "anytime utility over evaluations N+1..B (after generation 0)", "-", "paired runs", False),
     (r"^E_fresh$|^E_warm$", "mean evaluations to reach Q* (censored at B)", "evaluations", "paired runs", False),
     (r"^TG$", "transfer gain (E_fresh - E_warm) / E_fresh", "-", "paired runs", False),
     (r"^Q_star$", "median fresh best-so-far at 0.8 B", "J", "fresh runs", False),

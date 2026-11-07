@@ -91,10 +91,11 @@ def build_pairs(cfg: dict, runs: pd.DataFrame, curves: pd.DataFrame) -> pd.DataF
         wr = t[(t.scenario_id == p.target_id) & (t.source_id == p.source_id)].sort_values("repeat")
         if len(fr) == 0 or len(wr) != len(fr):
             continue
-        assert list(fr.repeat) == list(wr.repeat), "repeats must be matched"
+        assert list(fr["repeat"]) == list(wr["repeat"]), "repeats must be matched"
         bf = curves_matrix(curves, list(fr.run_id))
         bw = curves_matrix(curves, list(wr.run_id))
-        labels = pair_labels(bf, bw, lab["epsilon"], lab["sigma_floor_frac"], lab["target_fraction_of_budget"])
+        labels = pair_labels(bf, bw, lab["epsilon"], lab["sigma_floor_frac"], lab["target_fraction_of_budget"],
+                             n_gen0=int(cfg["de"]["N"]))
         out.append({**p.to_dict(), **labels,
                     "warm_feasible_share": float(wr.feasible.mean()),
                     "fresh_feasible_share": float(fr.feasible.mean())})

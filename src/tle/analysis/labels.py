@@ -52,10 +52,15 @@ def evals_to_target(best_so_far: np.ndarray, target_Q: float, B: int | None = No
     return int(hit[0]) + 1 if hit.size else int(B)
 
 
-def anytime_utility(bsf_fresh: np.ndarray, bsf_warm: np.ndarray, sigma: float) -> float:
-    """Area between mean best-so-far curves (fresh minus warm) over evaluations 1..B, / (B * sigma)."""
-    f = np.atleast_2d(bsf_fresh).mean(0)
-    w = np.atleast_2d(bsf_warm).mean(0)
+def anytime_utility(bsf_fresh: np.ndarray, bsf_warm: np.ndarray, sigma: float, start: int = 0) -> float:
+    """Area between mean best-so-far curves (fresh minus warm) over evaluations start+1..B, / (n * sigma).
+
+    start = 0 is the build-guide definition. Its first evaluations can carry penalty values orders of
+    magnitude above the converged range, so the variant starting after generation 0 (start = N) is
+    reported next to it.
+    """
+    f = np.atleast_2d(bsf_fresh).mean(0)[start:]
+    w = np.atleast_2d(bsf_warm).mean(0)[start:]
     return float((f - w).sum() / (len(f) * sigma))
 
 
@@ -64,7 +69,7 @@ def transfer_gain(E_fresh: float, E_warm: float) -> float:
 
 
 def pair_labels(bsf_fresh: np.ndarray, bsf_warm: np.ndarray, eps: float = 0.5, sigma_floor_frac: float = 0.01,
-                target_fraction: float = 0.8) -> dict:
+                target_fraction: float = 0.8, n_gen0: int = 20) -> dict:
     """All labels of one pair from the R x B best-so-far matrices of matched repeats."""
     bsf_fresh, bsf_warm = np.atleast_2d(bsf_fresh), np.atleast_2d(bsf_warm)
     B = bsf_fresh.shape[1]
@@ -81,6 +86,7 @@ def pair_labels(bsf_fresh: np.ndarray, bsf_warm: np.ndarray, eps: float = 0.5, s
         "U_raw": raw_utility(Qf, Qw),
         "harm": harm_label(U, eps),
         "anytime_U": anytime_utility(bsf_fresh, bsf_warm, sigma),
+        "anytime_U_post_gen0": anytime_utility(bsf_fresh, bsf_warm, sigma, start=n_gen0),
         "E_fresh": float(Ef),
         "E_warm": float(Ew),
         "TG": transfer_gain(Ef, Ew),

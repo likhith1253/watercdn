@@ -169,7 +169,7 @@ def tier_d(pairs: pd.DataFrame, runs: pd.DataFrame, q: int) -> pd.DataFrame:
             continue
         m = int(r.m_injected)
         f = probe_features(np.asarray(r.gen0_J), np.asarray(r.gen0_feasible), m, min(q, m))
-        rows.append({"pair_id": pid[key], "repeat": int(r.repeat), **f})
+        rows.append({"pair_id": pid[key], "repeat": int(r["repeat"]), **f})
     return pd.DataFrame(rows)
 
 

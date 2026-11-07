@@ -75,13 +75,13 @@ def probe_policy(train: pd.DataFrame, cal: pd.DataFrame, test: pd.DataFrame, pro
 
     sc_cal = scored(top_cal, cal, lambda t: [0])
     lam = choose_threshold(sc_cal.p_probe.to_numpy(), sc_cal.harm.to_numpy(), alpha, delta)
-    reps_of = outcomes.groupby("pair_id").repeat.apply(list)
+    reps_of = outcomes.groupby("pair_id")["repeat"].apply(list)
     sc = scored(top_test, test, lambda t: reps_of[t.pair_id])
     o = outcomes.set_index(["pair_id", "repeat"])
     acc = (sc.p_probe <= lam).to_numpy() if lam is not None else np.zeros(len(sc), bool)
     sc["accept"] = acc
     sc["U_real"] = [o.loc[(p, r), "U_r"] if a else o.loc[(p, r), f"U_reject_{q}"]
-                    for p, r, a in zip(sc.pair_id, sc.repeat, acc)]
+                    for p, r, a in zip(sc.pair_id, sc["repeat"], acc)]
     per_t = sc.groupby("target_id").agg(U=("U_real", "mean"), accept_share=("accept", "mean"),
                                         harm=("harm", "first")).reset_index()
     summary = {"decision_time_evals": q, "lambda": lam, "mean_utility": float(per_t.U.mean()),
