@@ -20,9 +20,10 @@ objective:
   weights_file: configs/generated/net3_weights.yaml   # produced by scripts/calibrate_weights.py
   shortfall_tol_mh: 0.001
   tank_tol_m3: 1.0
+  tank_balance: system   # total storage at 24 h >= total storage at 0 h (decision D-005)
 scenario_space:
-  leak_area_m2: [0.0002, 0.005]     # log-uniform, small leak to burst
-  demand_mult: [0.7, 1.3]
+  leak_area_m2: [0.0002, 0.003]     # log-uniform, ~4-60 L/s at 40 m (decision D-006)
+  demand_mult: [0.8, 1.2]
   peak_shift_h: [-3, 3]             # integer, circular shift of the residential pattern
-  pattern_amp: [0.7, 1.3]
+  pattern_amp: [0.8, 1.2]
   tank_level_frac: [0.3, 0.8]

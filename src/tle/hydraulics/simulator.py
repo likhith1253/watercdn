@@ -14,7 +14,7 @@ Objective (lower is better), all terms kept separately in the output:
     J = w_L * leakage volume [m3]
       + w_E * energy_weight_mult * pump energy cost [currency]
       + w_P * pressure shortfall [m h]   (sum over demand nodes and time of max(0, p_req - p))
-      + w_T * tank-balance deficit [m3]  (sum over tanks of max(0, V_start - V_end))
+      + w_T * tank-balance deficit [m3]  (max(0, sum V_start - sum V_end); per-tank variant optional)
 """
 from __future__ import annotations
 
@@ -53,6 +53,7 @@ class ProblemSpec:
     weights: ObjectiveWeights = field(default_factory=ObjectiveWeights)
     shortfall_tol_mh: float = 1e-3
     tank_tol_m3: float = 1.0
+    tank_balance: str = "system"  # "system": total storage; "per_tank": every tank separately
 
     def meta(self) -> dict:
         return json.loads(Path(self.meta_file).read_text())
@@ -205,6 +206,7 @@ class Simulator:
         shortfall_w = np.zeros(W)
         leak_w = np.zeros(W)
         unbalanced = False
+        demand_m3 = 0.0  # consumer volume delivered (detail mode only)
         get_node, get_link = p.get_node, p.get_link
         try:
             self._apply_decision(x)
@@ -234,6 +236,10 @@ class Simulator:
                 e = sum(get_link(i, en.EN_ENERGY) for i in self.pump_idx) * dt_h
                 energy_kwh += e
                 energy_cost += e * self.tariff[hour]
+                if keep_pressures:
+                    # EN_DEMAND includes emitter (leak) outflow; subtract it
+                    q_all = sum(get_node(i, en.EN_DEMAND) for i in self.junction_idx)
+                    demand_m3 += (q_all - q_leak_lps) / 1000.0 * dt
                 steps_p.append(pres)
                 steps_dt.append(dt_h)
                 steps_t.append(t)
@@ -244,7 +250,10 @@ class Simulator:
 
         P = np.vstack(steps_p)  # (steps, demand nodes)
         dts = np.asarray(steps_dt)
-        tank_def = float(np.maximum(v_start - v_end, 0.0).sum())
+        if spec.tank_balance == "system":
+            tank_def = float(max(v_start.sum() - v_end.sum(), 0.0))
+        else:
+            tank_def = float(np.maximum(v_start - v_end, 0.0).sum())
         shortfall = float(shortfall_w.sum())
         wts = spec.weights
         terms = {
@@ -279,6 +288,7 @@ class Simulator:
             "leak_by_window": leak_w.tolist(),
         }
         if keep_pressures:
+            out["demand_m3"] = float(demand_m3)
             out["pressures"] = P
             out["step_hours"] = dts
             out["step_times"] = np.asarray(steps_t)

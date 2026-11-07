@@ -150,3 +150,19 @@ def test_de_uses_exact_budget_and_is_reproducible(sim, base):
     assert ev1.count == 137 and out1.generations[0]["evals"] == 20
     assert np.array_equal(ev1.best_so_far, ev2.best_so_far)
     assert not np.array_equal(ev1.best_so_far, ev3.best_so_far)
+
+
+def test_leak_formula_matches_epanet_emitter(sim):
+    """EPANET's emitter outflow (EN_DEMAND with leak minus without) equals Cd*A*sqrt(2 g p)."""
+    x = np.r_[np.full(12, 0.8), np.full(12, 35.0)]
+    vals = {}
+    for area in (0.0, 1e-3):
+        sc = Scenario("t", "net3_prv", "111", area)
+        sim.set_scenario(sc)
+        sim._apply_decision(x)
+        sim.p.init_h()
+        sim.p.run_h()
+        i = sim.p.node_index("111")
+        vals[area] = (sim.p.get_node(i, en.EN_DEMAND), sim.p.get_node(i, en.EN_PRESSURE), sc.emitter_coeff_lps)
+    emitter = vals[1e-3][0] - vals[0.0][0]
+    assert emitter == pytest.approx(vals[1e-3][2] * math.sqrt(vals[1e-3][1]), rel=1e-3)

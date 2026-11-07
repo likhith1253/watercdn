@@ -1,0 +1,36 @@
+# E1: main benchmark on Net3-PRV (full configuration; affordable because one evaluation takes ~1.5 ms).
+extends: [configs/base_net3.yaml]
+experiment: E1
+seed: 20261107
+scenarios:
+  table: data/scenarios/e1_scenarios.csv
+  pairs: data/scenarios/e1_pairs.csv
+  manifest: data/scenarios/e1_manifest.json
+splits:            # four disjoint scenario sets
+  library: 40
+  train: 60
+  calibration: 80
+  test: 40
+pairs:
+  per_distance_tertile: 2   # S = 6 sources per target: 2 near, 2 mid, 2 far
+  repeats: 8                # R matched repeats per pair (test targets: test_repeats)
+  test_repeats: 10
+de:                         # frozen from configs/generated/de_tuning.yaml (decisions D-003, D-004)
+  strategy: rand1bin
+  F: 0.4
+  CR: 0.5
+  N: 20
+  budget_B: 400
+transfer:                   # frozen after the k/rho grid (docs/decisions.md)
+  k: 3
+  rho: 0.2
+  sigma_frac: 0.03
+  min_elite_distance_frac: 0.05
+labels:
+  epsilon: 0.5
+  sigma_floor_frac: 0.01
+  target_fraction_of_budget: 0.8
+gate:
+  alpha: [0.10, 0.20]
+  delta: 0.05
+results_dir: results/e1

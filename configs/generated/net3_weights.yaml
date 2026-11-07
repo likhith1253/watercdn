@@ -1,26 +1,26 @@
 weights:
-  leak: 0.0005105779696438009
-  energy: 0.0014669634122133045
-  shortfall: 0.07226387987790267
-  tank: 0.2267272285249053
+  leak: 0.0006563260983307578
+  energy: 0.0014688460530129358
+  shortfall: 0.07224355372515327
+  tank: 0.22666344714779885
 stats:
   n_samples: 200
   n_failed: 0
-  median_leak_m3: 1958.564723616334
-  median_energy_cost: 681.6802598309075
-  median_shortfall_mh: 331.9758021084648
-  median_tank_deficit_m3: 0.0006953585932478745
-  operating_range_R: 1.1336361426245265
-  q10_violating_shortfall_mh: 31.37490388116228
+  median_leak_m3: 1523.6328443182624
+  median_energy_cost: 680.8065405825025
+  median_shortfall_mh: 331.97590698831493
+  median_tank_deficit_m3: 0.0
+  operating_range_R: 1.1333172357389942
+  q10_violating_shortfall_mh: 31.37490273666877
   q10_violating_tank_deficit_m3: 10.0
   n_violating_shortfall: 200
-  n_violating_tank: 1
+  n_violating_tank: 0
   share_feasible: 0.0
 base_scenario:
   scenario_id: base
   network: net3_prv
   leak_node: '111'
-  leak_area_m2: 0.001
+  leak_area_m2: 0.0007745966692414834
   demand_mult: 1.0
   peak_shift_h: 0
   pattern_amp: 1.0
@@ -32,5 +32,5 @@ seed: 20261107
 provenance:
   wntr_version: 1.5.0
   epanet_version: 2.2 (bundled with WNTR)
-  git_commit: uncommitted
-  config_hash: dbf7e7f80429
+  git_commit: dec998a949fb-dirty
+  config_hash: 072a119a5e5d

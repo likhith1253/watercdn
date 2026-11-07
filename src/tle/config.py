@@ -65,6 +65,7 @@ def problem_spec(cfg: dict) -> ProblemSpec:
         weights=ObjectiveWeights(**w) if w else ObjectiveWeights(),
         shortfall_tol_mh=float(cfg["objective"].get("shortfall_tol_mh", 1e-3)),
         tank_tol_m3=float(cfg["objective"].get("tank_tol_m3", 1.0)),
+        tank_balance=str(cfg["objective"].get("tank_balance", "system")),
     )
 
 
