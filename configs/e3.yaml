@@ -1,0 +1,20 @@
+# E3: layout change (1, 2, 3 closed pipes); sources from the E1 library.
+extends: [configs/e1.yaml]
+experiment: E3
+scenarios:
+  table: data/scenarios/e3_scenarios.csv
+  pairs: data/scenarios/e3_pairs.csv
+  manifest: data/scenarios/e3_manifest.json
+shift:
+  kind: layout
+  library_table: data/scenarios/e1_scenarios.csv
+  targets_per_group: 30
+  calibration_share: 0.0     # E2: half of each goal's targets recalibrate lambda; E3: all targets are test
+  id_start: 3000
+pairs:
+  per_distance_tertile: 2
+  repeats: 8
+  test_repeats: 8
+frozen_gate: results/e1/models/gate_M5.joblib
+reuse_library_from: results/e1/jobs
+results_dir: results/e3

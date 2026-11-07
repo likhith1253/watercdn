@@ -1,0 +1,59 @@
+{
+  "name": "ltown_prv",
+  "source": "BattLeDIM L-TOWN_v2_Model.inp (EUPL-1.2)",
+  "source_url": "https://media.githubusercontent.com/media/KIOS-Research/BattLeDIM/master/Dataset%20Generator/L-TOWN_v2_Model.inp",
+  "source_sha256": "1b9ba161e3aebe02a916876d60c2126ee76f75e9f0d23c9ec4dfffd59cc0c366",
+  "inp_sha256": "d2b7ad0ef157fd68df8d81b364cee73bd15194f67f26fe134153415a1324499d",
+  "wntr_version": "1.5.0",
+  "edits": {
+    "controls_removed": true,
+    "closed_pipes": [],
+    "prvs": []
+  },
+  "zones": {
+    "PRV-3": [
+      "n205",
+      "n206",
+      "n207",
+      "n208",
+      "n209",
+      "n210",
+      "n211",
+      "n212",
+      "n213",
+      "n215",
+      "n216",
+      "n217",
+      "n226",
+      "n227",
+      "n231",
+      "n233",
+      "n234",
+      "n236",
+      "n237",
+      "n242",
+      "n243",
+      "n246",
+      "n247",
+      "n253",
+      "n254",
+      "n337",
+      "n623",
+      "n624",
+      "n625",
+      "n626",
+      "n667"
+    ]
+  },
+  "pumps": [
+    "PUMP_1"
+  ],
+  "prvs": [
+    "PRV-1",
+    "PRV-2",
+    "PRV-3"
+  ],
+  "required_pressure_m": 20.0,
+  "bulk_nodes": [],
+  "residential_pattern": "P-Residential"
+}

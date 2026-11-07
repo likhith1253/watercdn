@@ -1,0 +1,39 @@
+# E4: held-out network (L-Town). Own library and pairs; DE settings, k, rho, labels and gate settings frozen from E1.
+# B is chosen on L-Town training scenarios with the same remaining-regret rule (no retuning of F, CR, N).
+extends: [configs/base_ltown.yaml]
+experiment: E4
+seed: 20261108
+scenarios:
+  table: data/scenarios/e4_scenarios.csv
+  pairs: data/scenarios/e4_pairs.csv
+  manifest: data/scenarios/e4_manifest.json
+splits:
+  library: 20
+  train: 30
+  calibration: 30
+  test: 20
+pairs:
+  per_distance_tertile: 2   # S = 6
+  repeats: 4
+  test_repeats: 4
+de:
+  strategy: rand1bin
+  F: 0.4
+  CR: 0.5
+  N: 20
+  budget_B: null
+  budget_file: configs/generated/e4_budget.yaml   # chosen_B of the regret rule
+transfer:
+  k: 3
+  rho: 0.4
+  sigma_frac: 0.03
+  min_elite_distance_frac: 0.05
+labels:
+  epsilon: 0.5
+  sigma_floor_frac: 0.01
+  target_fraction_of_budget: 0.8
+gate:
+  alpha: [0.10, 0.20]
+  delta: 0.05
+frozen_gate: results/e1/models/gate_M5.joblib
+results_dir: results/e4

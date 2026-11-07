@@ -32,5 +32,5 @@ seed: 20261107
 provenance:
   wntr_version: 1.5.0
   epanet_version: 2.2 (bundled with WNTR)
-  git_commit: dec998a949fb-dirty
+  git_commit: 975a83ce3f6b
   config_hash: 072a119a5e5d

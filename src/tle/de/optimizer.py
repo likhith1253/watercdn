@@ -99,8 +99,16 @@ def run_de(
     pop0: np.ndarray,
     rng_de: np.random.Generator,
     on_generation: Callable[[int, np.ndarray], None] | None = None,
+    trial_hook: Callable[[np.ndarray, int, np.ndarray, np.ndarray], np.ndarray] | None = None,
+    after_eval: Callable[[np.ndarray, dict], None] | None = None,
 ) -> DEResult:
-    """DE/rand/1/bin. Generation 0 evaluates all N members of ``pop0``; the run stops at exactly B."""
+    """DE/rand/1/bin. Generation 0 evaluates all N members of ``pop0``; the run stops at exactly B.
+
+    ``trial_hook(trial, i, pop, fit)`` may replace a trial vector before it is
+    evaluated (used by the BCKT-style baseline); ``after_eval(x, result)`` is
+    called after every evaluation (generation 0 included). Neither
+    changes the DE random stream.
+    """
     lo, hi = ev.sim.lo, ev.sim.hi
     D = len(lo)
     if pop0.shape != (N, D):
@@ -108,7 +116,11 @@ def run_de(
     if ev.budget < N:
         raise ValueError("budget smaller than the population size")
     pop = pop0.copy()
-    res = [ev(x) for x in pop]
+    res = []
+    for x in pop:
+        res.append(ev(x))
+        if after_eval is not None:
+            after_eval(x, res[-1])
     fit = np.array([r["J"] for r in res])
     out = DEResult(pop, fit, res)
     _log_generation(out, 0, ev, lo, hi)
@@ -125,7 +137,11 @@ def run_de(
             cross = rng_de.random(D) < CR
             cross[rng_de.integers(D)] = True
             trial = np.where(cross, mutant, pop[i])
+            if trial_hook is not None:
+                trial = trial_hook(trial, i, pop, fit)
             r = ev(trial)
+            if after_eval is not None:
+                after_eval(trial, r)
             if r["J"] <= fit[i]:
                 pop[i], fit[i], res[i] = trial, r["J"], r
         gen += 1

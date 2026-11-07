@@ -28,13 +28,14 @@ def _largest_remainder(total: int, shares: dict[str, float]) -> dict[str, int]:
     return out
 
 
-def sample_scenarios(cfg: dict, n: int, master_seed: int, prefix: str = "s") -> pd.DataFrame:
+def sample_scenarios(cfg: dict, n: int, master_seed: int, prefix: str = "s", start: int = 0) -> pd.DataFrame:
     """Scrambled Sobol over the continuous factors, stratified draw over leak zone and node."""
     space = cfg["scenario_space"]
     info = network_info(cfg)
     cands = leak_candidates(cfg)
-    by_zone = {z: [j for j in cands if info["junctions"][j]["zone"] == z] for z in ZONE_SHARES}
-    quotas = _largest_remainder(n, ZONE_SHARES)
+    shares = space.get("zone_shares", ZONE_SHARES)
+    by_zone = {z: [j for j in cands if info["junctions"][j]["zone"] == z] for z in shares}
+    quotas = _largest_remainder(n, shares)
     r = rng(master_seed, "scenarios", 0)
     zones = np.array([z for z, q in quotas.items() for _ in range(q)])
     r.shuffle(zones)
@@ -49,7 +50,7 @@ def sample_scenarios(cfg: dict, n: int, master_seed: int, prefix: str = "s") -> 
         sh_lo, sh_hi = space["peak_shift_h"]
         rows.append(
             Scenario(
-                scenario_id=f"{prefix}{i:04d}",
+                scenario_id=f"{prefix}{start + i:04d}",
                 network=cfg["network"]["name"],
                 leak_node=nodes[min(int(u[5] * len(nodes)), len(nodes) - 1)],
                 leak_area_m2=float(np.exp(np.log(a_lo) + u[0] * (np.log(a_hi) - np.log(a_lo)))),

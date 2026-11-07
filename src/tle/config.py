@@ -43,6 +43,11 @@ def load_config(path: str | Path) -> dict:
     wfile = merged.get("objective", {}).get("weights_file")
     if wfile and repo_path(wfile).exists():
         merged["objective"]["weights"] = yaml.safe_load(repo_path(wfile).read_text())["weights"]
+    # budget chosen by the remaining-regret rule (E4) lives in a generated file
+    de = merged.get("de", {})
+    bfile = de.get("budget_file")
+    if de.get("budget_B") is None and bfile and repo_path(bfile).exists():
+        de["budget_B"] = yaml.safe_load(repo_path(bfile).read_text())["budget_rule"]["chosen_B"]
     return merged
 
 

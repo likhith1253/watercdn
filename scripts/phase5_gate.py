@@ -10,6 +10,7 @@ import argparse
 import datetime as dt
 import json
 
+import joblib
 import matplotlib
 
 matplotlib.use("Agg")
@@ -24,63 +25,12 @@ from tle.features.build import PROBE_SIZES
 from tle.models.ablation import design, model_specs
 from tle.models.gate import (choose_threshold, decide, evaluate_decisions, oracle_utility, resplit_experiment,
                              top_source)
-from tle.models.policy import repeat_outcomes
-from tle.models.predictors import HarmModel, UtilityModel
+from tle.models.policy import probe_policy, repeat_outcomes
+from tle.models.fit import fit_predict
 from tle.seeds import rng
 
 N_SPLITS = 200
 ALPHA_CURVE = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50]
-
-
-def fit_predict(train: pd.DataFrame, other: pd.DataFrame, cols: list[str], seed: int,
-                kind_u="lgbm", kind_h="lgbm", h_col="harm") -> pd.DataFrame:
-    g = train.target_id.to_numpy()
-    um = UtilityModel(kind_u, seed).fit(train[cols].to_numpy(float), train.U_mean.to_numpy(float), g)
-    hm = HarmModel(kind_h, seed).fit(train[cols].to_numpy(float), train[h_col].to_numpy(int), g)
-    pred = um.predict(other[cols].to_numpy(float))
-    pred["p_harm"] = hm.predict_proba(other[cols].to_numpy(float))
-    keep = ["pair_id", "target_id", "source_id", "split", "U_mean", "harm", "TG", "anytime_U", "E_fresh", "E_warm"]
-    return pd.concat([other[keep].reset_index(drop=True), pred], axis=1)
-
-
-def probe_mode(train, cal, test, probe, outcomes, cols_abc, top_cal, top_test, alpha, delta, seed, eps):
-    """Per probe size q: M6_q (tiers a-d) fitted on training pairs; lambda_q on calibration targets
-    (repeat 0 of the zero-shot top source); evaluated per repeat on test targets."""
-    rows = []
-    for q in PROBE_SIZES:
-        pq = probe[probe.probe_q == q]
-        pm = pq.drop(columns=["probe_q", "repeat"]).groupby("pair_id").mean()
-        dcols = list(pm.columns)
-        tr = train.drop(columns=[c for c in train.columns if c.startswith("d_")]).merge(pm, on="pair_id")
-        hm = HarmModel("lgbm", seed).fit(tr[cols_abc + dcols].to_numpy(float), tr.harm.to_numpy(int),
-                                         tr.target_id.to_numpy())
-
-        def scored(top, df, reps):
-            base = df.drop(columns=[c for c in df.columns if c.startswith("d_")]).set_index("pair_id")
-            pr = pq.set_index(["pair_id", "repeat"])
-            out = []
-            for _, t in top.iterrows():
-                for r in reps(t):
-                    x = np.r_[base.loc[t.pair_id, cols_abc].to_numpy(float), pr.loc[(t.pair_id, r), dcols].to_numpy(float)]
-                    out.append({"target_id": t.target_id, "pair_id": t.pair_id, "repeat": r, "harm": t.harm,
-                                "p_probe": float(hm.predict_proba(x[None, :])[0])})
-            return pd.DataFrame(out)
-
-        sc_cal = scored(top_cal, cal, lambda t: [0])
-        lam = choose_threshold(sc_cal.p_probe.to_numpy(), sc_cal.harm.to_numpy(), alpha, delta)
-        reps_of = outcomes.groupby("pair_id").repeat.apply(list)
-        sc_test = scored(top_test, test, lambda t: reps_of[t.pair_id])
-        o = outcomes.set_index(["pair_id", "repeat"])
-        acc = sc_test.p_probe <= lam if lam is not None else np.zeros(len(sc_test), bool)
-        U = [o.loc[(p, r), "U_r"] if a else o.loc[(p, r), f"U_reject_{q}"]
-             for p, r, a in zip(sc_test.pair_id, sc_test.repeat, acc)]
-        sc_test["accept"], sc_test["U_real"] = acc, U
-        per_t = sc_test.groupby("target_id").agg(U=("U_real", "mean"))
-        rows.append({"decision_time_evals": q, "lambda": lam, "mean_utility": float(per_t.U.mean()),
-                     "abstention_rate": float(1 - np.mean(acc)),
-                     "harm_rate_among_accepted": float(sc_test[acc].harm.mean()) if np.any(acc) else 0.0,
-                     "n_decisions": int(len(sc_test))})
-    return pd.DataFrame(rows)
 
 
 def main() -> None:
@@ -100,7 +50,7 @@ def main() -> None:
     cols = specs["M5"]
     oracle = oracle_utility(pairs)
 
-    pred = fit_predict(train, pd.concat([cal, test], ignore_index=True), cols, seed)
+    pred, um, hm = fit_predict(train, pd.concat([cal, test], ignore_index=True), cols, seed)
     pred.to_csv(out / "predictions_cal_test_M5.csv", index=False)
     top_all = top_source(pred)
     top_cal = top_all[top_all.split == "calibration"].reset_index(drop=True)
@@ -143,13 +93,24 @@ def main() -> None:
         final.append({"alpha": a, "lambda": lam, **res, "harm_rate_CP_lo": lo, "harm_rate_CP_hi": hi})
     final = pd.DataFrame(final)
     final.to_csv(out / "final_test_gate.csv", index=False)
+    models_dir = repo_path(cfg["results_dir"]) / "models"
+    models_dir.mkdir(parents=True, exist_ok=True)
+    joblib.dump({"utility_model": um, "harm_model": hm, "feature_columns": cols,
+                 "lambda": {float(a): l for a, l in zip(final.alpha, final["lambda"])},
+                 "delta": delta, "provenance": provenance(cfg)}, models_dir / "gate_M5.joblib")
     print(final.round(3).to_string())
 
     # ---- probe mode (C4) at the main alpha
     outcomes = repeat_outcomes(runs, curves, pairs)
     outcomes.to_parquet(out / "repeat_outcomes.parquet", index=False)
     main_alpha = max(alphas)
-    pm = probe_mode(train, cal, test, probe, outcomes, cols, top_cal, top_test, main_alpha, delta, seed, eps)
+    probe_rows, per_target = [], []
+    for q in PROBE_SIZES:
+        summ, pt = probe_policy(train, cal, test, probe, outcomes, cols, top_cal, top_test, q, main_alpha, delta, seed)
+        probe_rows.append(summ)
+        per_target.append(pt.assign(probe_q=q))
+    pd.concat(per_target).to_csv(out / "probe_per_target.csv", index=False)
+    pm = pd.DataFrame(probe_rows)
     zs = final[final.alpha == main_alpha].iloc[0]
     pm = pd.concat([pd.DataFrame([{"decision_time_evals": 0, "lambda": zs["lambda"], "mean_utility": zs.mean_utility,
                                    "abstention_rate": zs.abstention_rate,

@@ -197,3 +197,59 @@ def network_constants(inp: str | Path, meta: dict) -> dict:
             "zone": zone_of.get(j, "main"),
         }
     return {"junctions": junction_info, "feeders": feeders}
+
+
+LTOWN_FILE = "downloads/L-TOWN_v2_Model.inp"
+LTOWN_URL = ("https://media.githubusercontent.com/media/KIOS-Research/BattLeDIM/master/"
+             "Dataset%20Generator/L-TOWN_v2_Model.inp")
+
+
+def build_ltown_prv(out_dir: str | Path) -> Path:
+    """Edited L-Town (BattLeDIM, EUPL-1.2) for E4.
+
+    L-Town already has one pump and three PRVs, so no valves are added. Edits:
+    controls removed (pump speed and PRV settings are decisions), 24 h horizon with
+    1 h steps, pressure-driven demand (required 20 m), SI units (L/s). The PRV
+    zones are the source-free components created by removing each PRV.
+    """
+    out_dir = Path(out_dir)
+    src = out_dir / LTOWN_FILE
+    if not src.exists():
+        raise FileNotFoundError(f"download L-Town first: {LTOWN_URL} -> {src}")
+    wn = wntr.network.WaterNetworkModel(str(src))
+    for name in list(wn.control_name_list):
+        wn.remove_control(name)
+    for name, pump in wn.pumps():
+        pump.initial_status = wntr.network.LinkStatus.Open
+    zones = {}
+    g_all = nx.MultiGraph()
+    for name, link in wn.links():
+        g_all.add_edge(link.start_node_name, link.end_node_name, key=name)
+    sources = set(wn.tank_name_list) | set(wn.reservoir_name_list)
+    for name in wn.valve_name_list:
+        v = wn.get_link(name)
+        g = g_all.copy()
+        g.remove_edge(v.start_node_name, v.end_node_name, key=name)
+        comp = nx.node_connected_component(g, v.end_node_name)
+        zones[name] = sorted(n for n in comp if n in set(wn.junction_name_list)) if not comp & sources else []
+    t = wn.options.time
+    t.duration, t.hydraulic_timestep, t.pattern_timestep, t.report_timestep, t.quality_timestep = (
+        24 * 3600, 3600, 3600, 3600, 3600)
+    t.pattern_start = 0
+    wn.options.quality.parameter = "NONE"
+    h = wn.options.hydraulic
+    h.demand_model, h.minimum_pressure, h.required_pressure = "PDD", 0.0, REQUIRED_PRESSURE_M
+    h.pressure_exponent, h.emitter_exponent = 0.5, 0.5
+    inp = out_dir / "ltown_prv.inp"
+    wntr.network.write_inpfile(wn, str(inp), units="LPS", version=2.2)
+    meta = {
+        "name": "ltown_prv", "source": "BattLeDIM L-TOWN_v2_Model.inp (EUPL-1.2)", "source_url": LTOWN_URL,
+        "source_sha256": file_sha256(src), "inp_sha256": file_sha256(inp), "wntr_version": wntr.__version__,
+        "edits": {"controls_removed": True, "closed_pipes": [], "prvs": []},
+        "zones": {k: v for k, v in zones.items() if v},
+        "pumps": list(wn.pump_name_list), "prvs": list(wn.valve_name_list),
+        "required_pressure_m": REQUIRED_PRESSURE_M, "bulk_nodes": [],
+        "residential_pattern": "P-Residential",
+    }
+    (out_dir / "ltown_prv.meta.json").write_text(json.dumps(meta, indent=2))
+    return inp

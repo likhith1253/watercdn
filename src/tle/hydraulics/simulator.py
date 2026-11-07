@@ -122,7 +122,7 @@ class Simulator:
 
         # originals restored on every scenario change
         self.orig_status = {i: p.get_link(i, en.EN_INITSTATUS) for i in range(1, n_links + 1)}
-        self.pattern_res = p.pattern_index(self.RESIDENTIAL_PATTERN)
+        self.pattern_res = p.pattern_index(self.meta.get("residential_pattern", self.RESIDENTIAL_PATTERN))
         self.pattern_res_orig = np.array(
             [p.get_pattern_value(self.pattern_res, k) for k in range(1, p.pattern_len(self.pattern_res) + 1)]
         )

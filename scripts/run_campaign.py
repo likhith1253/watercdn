@@ -7,6 +7,7 @@ under <results_dir>/jobs/; build tables with scripts/build_tables.py.
 from __future__ import annotations
 
 import argparse
+import shutil
 import time
 
 import joblib
@@ -29,6 +30,17 @@ def main() -> None:
     pairs = read_pairs(cfg["scenarios"]["pairs"])
     if args.targets:
         pairs = pairs[pairs.target_id.isin(args.targets)]
+
+    reuse = cfg.get("reuse_library_from")
+    if reuse:  # E2/E3: the library is the E1 library; copy its source runs and reference evaluations
+        lib_ids = set(scen[scen.split == "library"].scenario_id)
+        for kind in ("library", "reference"):
+            (root / kind).mkdir(parents=True, exist_ok=True)
+            for sid in lib_ids:
+                src = repo_path(reuse) / kind / f"{sid}.joblib"
+                dst = root / kind / f"{sid}.joblib"
+                if not dst.exists():
+                    shutil.copyfile(src, dst)
 
     if "library" in args.stages:
         t0 = time.time()

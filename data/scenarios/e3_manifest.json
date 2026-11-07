@@ -1,0 +1,14 @@
+{
+  "experiment": "E3",
+  "kind": "layout",
+  "scenario_table_sha256": "261d7d0506e1cfe2e90b0bcfe1116e1b860ab270d0f6f11b991530058ff6d930",
+  "pair_manifest_sha256": "26d34a214ca1fd1b0878da912f361a356b32fc3874bad0bbf101b34064407941",
+  "targets_per_group": {
+    "test": {
+      "1": 30,
+      "2": 30,
+      "3": 30
+    }
+  },
+  "config_hash": "503631611c9b"
+}

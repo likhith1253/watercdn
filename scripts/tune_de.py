@@ -64,20 +64,11 @@ def _budget_job(args):
     return out
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--config", default="configs/e1.yaml")
-    ap.add_argument("--seeds", type=int, default=5)
-    args = ap.parse_args()
-    cfg = load_config(args.config)
-    scen = read_scenarios(cfg["scenarios"]["table"])
-    outdir = repo_path(cfg["results_dir"]) / "tuning"
-    outdir.mkdir(parents=True, exist_ok=True)
-
+def tune_grid(cfg, scen, seeds, outdir):
     tune_sc = pick_train(scen, {"main": 3, "A": 2, "B": 1}, cfg["seed"], 0)
     jobs = [(cfg, row, si, s, F, CR, N)
             for si, (_, row) in enumerate(tune_sc.iterrows())
-            for s in range(args.seeds)
+            for s in range(seeds)
             for F, CR, N in itertools.product(GRID["F"], GRID["CR"], GRID["N"])]
     tune = pd.DataFrame(parallel_map(_tune_job, jobs))
     tune["Q_rel"] = tune.Q / tune.groupby("scenario_id").Q.transform("min")
@@ -85,11 +76,34 @@ def main() -> None:
     score = tune.groupby(["F", "CR", "N"]).agg(median_Q_rel=("Q_rel", "median"), mean_Q_rel=("Q_rel", "mean"),
                                                feasible=("feasible", "mean")).reset_index()
     score = score.sort_values(["median_Q_rel", "mean_Q_rel"]).reset_index(drop=True)
-    best = score.iloc[0]
-    F, CR, N = float(best.F), float(best.CR), int(best.N)
     print(score.to_string())
+    best = score.iloc[0]
+    return float(best.F), float(best.CR), int(best.N), tune_sc, score
 
-    bud_sc = pick_train(scen, {"main": 2, "A": 2, "B": 1}, cfg["seed"], 1)
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--config", default="configs/e1.yaml")
+    ap.add_argument("--seeds", type=int, default=5)
+    ap.add_argument("--budget-only", action="store_true",
+                    help="keep F, CR, N from the config and only apply the budget rule (E4)")
+    ap.add_argument("--budget-zones", default="main:2,A:2,B:1",
+                    help="training scenarios per leak zone for the budget rule")
+    ap.add_argument("--out", default="configs/generated/de_tuning.yaml")
+    args = ap.parse_args()
+    cfg = load_config(args.config)
+    scen = read_scenarios(cfg["scenarios"]["table"])
+    outdir = repo_path(cfg["results_dir"]) / "tuning"
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    if args.budget_only:
+        F, CR, N = float(cfg["de"]["F"]), float(cfg["de"]["CR"]), int(cfg["de"]["N"])
+        tune_sc, score = None, pd.DataFrame()
+    else:
+        F, CR, N, tune_sc, score = tune_grid(cfg, scen, args.seeds, outdir)
+
+    per_zone = {z: int(n) for z, n in (kv.split(":") for kv in args.budget_zones.split(","))}
+    bud_sc = pick_train(scen, per_zone, cfg["seed"], 1)
     jobs = [(cfg, row, si, s, N, F, CR) for si, (_, row) in enumerate(bud_sc.iterrows()) for s in range(3)]
     bud = pd.DataFrame(parallel_map(_budget_job, jobs))
     bud.to_csv(outdir / "budget_runs.csv", index=False)
@@ -103,7 +117,8 @@ def main() -> None:
     print("median remaining regret:", json.dumps(regret, indent=1), "chosen B:", chosen)
 
     out = {
-        "de_grid": GRID, "tuning_budget": TUNING_B, "tuning_scenarios": list(tune_sc.scenario_id),
+        "de_grid": None if args.budget_only else GRID, "tuning_budget": None if args.budget_only else TUNING_B,
+        "tuning_scenarios": [] if tune_sc is None else list(tune_sc.scenario_id),
         "seeds_per_scenario": args.seeds,
         "scores": score.to_dict(orient="records"),
         "chosen": {"F": F, "CR": CR, "N": N},
@@ -113,8 +128,7 @@ def main() -> None:
                         "feasible_share_at_5Bmax": float(bud.feasible_at_max.mean())},
         "provenance": provenance(cfg),
     }
-    path = repo_path("configs/generated/de_tuning.yaml")
-    path.write_text(yaml.safe_dump(out, sort_keys=False))
+    repo_path(args.out).write_text(yaml.safe_dump(out, sort_keys=False))
 
 
 if __name__ == "__main__":

@@ -65,5 +65,5 @@ n_clearly_harmful: 0
 provenance:
   wntr_version: 1.5.0
   epanet_version: 2.2 (bundled with WNTR)
-  git_commit: 5563fb271aaf
-  config_hash: 8e546b2338e5
+  git_commit: 975a83ce3f6b-dirty
+  config_hash: e5f0462eb275

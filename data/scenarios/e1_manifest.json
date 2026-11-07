@@ -10,7 +10,7 @@
   },
   "scenario_table_sha256": "e43013f10808106203f404cae3b38cc723bcb857ef91f797b24be39d6dfa41ff",
   "pair_manifest_sha256": "8214d0fb810a5221119d534c528b8dce9335a05a0748220d3bdd7d3159a78148",
-  "config_hash": "30694346596e",
+  "config_hash": "e5f0462eb275",
   "zone_counts_by_split": {
     "A": {
       "calibration": 24,

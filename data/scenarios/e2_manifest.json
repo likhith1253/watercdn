@@ -1,0 +1,17 @@
+{
+  "experiment": "E2",
+  "kind": "goal",
+  "scenario_table_sha256": "eeb55527a328943dcf83c90d677d25082a8ecdcaa661873705295c5b7e12c8a1",
+  "pair_manifest_sha256": "8922384e5900cf02f7f863d256310d0bab04eb91aa65730b8663b9a94e946fb8",
+  "targets_per_group": {
+    "calibration": {
+      "G1": 20,
+      "G2": 20
+    },
+    "test": {
+      "G1": 20,
+      "G2": 20
+    }
+  },
+  "config_hash": "db8431902bc3"
+}

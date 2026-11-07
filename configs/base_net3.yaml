@@ -27,3 +27,4 @@ scenario_space:
   peak_shift_h: [-3, 3]             # integer, circular shift of the residential pattern
   pattern_amp: [0.8, 1.2]
   tank_level_frac: [0.3, 0.8]
+  zone_shares: {main: 0.5, A: 0.3, B: 0.2}

@@ -1,0 +1,28 @@
+# Problem definition on the edited L-Town network (E4, held-out network).
+network:
+  name: ltown_prv
+  inp: data/networks/ltown_prv.inp
+  meta: data/networks/ltown_prv.meta.json
+simulator: epanet-2.2-toolkit
+demand_model: PDA
+required_pressure_m: 20.0
+decision:
+  horizon_hours: 24
+  windows: 6
+  pump_speed: [0.4, 1.0]
+  prv_setting_m: [25.0, 60.0]   # settings below ~30 m starve demand nodes (probe in docs/decisions.md)
+objective:
+  tariff: [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10,
+           0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20,
+           0.10]
+  weights_file: configs/generated/ltown_weights.yaml
+  shortfall_tol_mh: 0.001
+  tank_tol_m3: 1.0
+  tank_balance: system
+scenario_space:
+  leak_area_m2: [0.0002, 0.003]
+  demand_mult: [0.8, 1.2]
+  peak_shift_h: [-3, 3]
+  pattern_amp: [0.8, 1.2]
+  tank_level_frac: [0.3, 0.8]
+  zone_shares: {main: 0.7, PRV-3: 0.3}
