@@ -35,7 +35,7 @@ def main() -> None:
                 "pair_manifest_sha256": write_manifest(pairs, cfg["scenarios"]["pairs"]),
                 "targets_per_group": tg.groupby(["group", "split"]).size().unstack().to_dict(),
                 "config_hash": config_hash(cfg)}
-    repo_path(cfg["scenarios"]["manifest"]).write_text(json.dumps(manifest, indent=2, default=str))
+    repo_path(cfg["scenarios"]["manifest"]).write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
     print(json.dumps(manifest, indent=2, default=str))
 
 

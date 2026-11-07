@@ -157,7 +157,7 @@ def main() -> None:
     summary = {"test_targets_first_accessed": first_access, "alphas": alphas, "delta": delta,
                "resplit_summary": rs_sum.to_dict(orient="records"), "final_test": final.to_dict(orient="records"),
                "provenance": provenance(cfg)}
-    (out / "phase5_summary.json").write_text(json.dumps(summary, indent=2, default=float))
+    (out / "phase5_summary.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
 
 
 if __name__ == "__main__":

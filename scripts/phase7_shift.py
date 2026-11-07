@@ -119,7 +119,7 @@ def main() -> None:
         ax.legend(fontsize=7)
         fig.tight_layout()
         fig.savefig(repo_path("figures") / f"f8b_recalibration_{exp.lower()}.png", dpi=150)
-    (out / "phase7_summary.json").write_text(json.dumps(summary, indent=2, default=float))
+    (out / "phase7_summary.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
 
 
 if __name__ == "__main__":

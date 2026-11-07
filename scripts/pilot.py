@@ -187,7 +187,7 @@ def main() -> None:
                "n_clearly_helpful": int(tmap.clearly_helpful.sum()),
                "n_clearly_harmful": int(tmap.clearly_harmful.sum()),
                "provenance": provenance(cfg)}
-    (out / "pilot_summary.yaml").write_text(yaml.safe_dump(summary, sort_keys=False))
+    (out / "pilot_summary.yaml").write_text(yaml.safe_dump(summary, sort_keys=False), encoding="utf-8")
 
 
 if __name__ == "__main__":

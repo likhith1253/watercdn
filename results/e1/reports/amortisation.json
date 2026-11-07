@@ -1,0 +1,12 @@
+{
+  "policy": "B6 gate a=0.20",
+  "B": 400,
+  "mean_evals_saved_per_task": 233.03249999999997,
+  "C_library": 16000,
+  "C_labels_train": 1344000,
+  "C_labels_train_and_calibration": 3136000,
+  "break_even_dedicated_train_only": 5836.095823543927,
+  "break_even_byproduct_train_only": 5767.435872678704,
+  "break_even_dedicated_with_calibration": 13526.010320448866,
+  "break_even_byproduct_with_calibration": 13457.350369583644
+}

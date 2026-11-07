@@ -55,7 +55,7 @@ def main() -> None:
               "time is 2-4x higher because of clock throttling; campaign wall-clock times are logged per run (`wall_s`).",
               "", "Evaluations are cheap (well under 0.05 s on Net3), so the study claims evaluation efficiency and",
               "reports wall-clock time; it does not claim savings of expensive simulations."]
-    repo_path("docs/timing.md").write_text("\n".join(lines) + "\n")
+    repo_path("docs/timing.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
 
 

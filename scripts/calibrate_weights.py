@@ -25,7 +25,7 @@ def main() -> None:
     res["seed"] = args.seed
     res["provenance"] = provenance(cfg)
     out_file.parent.mkdir(parents=True, exist_ok=True)
-    out_file.write_text(yaml.safe_dump(res, sort_keys=False))
+    out_file.write_text(yaml.safe_dump(res, sort_keys=False), encoding="utf-8")
     print(yaml.safe_dump(res, sort_keys=False))
 
 

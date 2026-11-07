@@ -165,9 +165,9 @@ def main() -> None:
     amort = amortisation(cfg)
     xcheck = cross_check(cfg)
     out = repo_path(cfg["results_dir"]) / "reports"
-    (out / "amortisation.json").write_text(json.dumps(amort, indent=2, default=float))
-    (out / "cross_check.json").write_text(json.dumps(xcheck, indent=2))
-    Path(repo_path("RESULTS.md")).write_text(results_md(cfg, amort, xcheck))
+    (out / "amortisation.json").write_text(json.dumps(amort, indent=2, default=float), encoding="utf-8")
+    (out / "cross_check.json").write_text(json.dumps(xcheck, indent=2), encoding="utf-8")
+    Path(repo_path("RESULTS.md")).write_text(results_md(cfg, amort, xcheck), encoding="utf-8")
     print(json.dumps({"amortisation": amort, "cross_check": xcheck, "provenance": provenance(cfg)}, indent=2, default=float))
 
 

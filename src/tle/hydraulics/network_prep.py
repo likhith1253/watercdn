@@ -161,7 +161,7 @@ def build_net3_prv(out_dir: str | Path) -> Path:
             if any(d.base_value > 0 and d.pattern_name not in (None, "1") for d in wn.get_node(j).demand_timeseries_list)
         ),
     }
-    (out_dir / "net3_prv.meta.json").write_text(json.dumps(meta, indent=2))
+    (out_dir / "net3_prv.meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return inp
 
 
@@ -251,5 +251,5 @@ def build_ltown_prv(out_dir: str | Path) -> Path:
         "required_pressure_m": REQUIRED_PRESSURE_M, "bulk_nodes": [],
         "residential_pattern": "P-Residential",
     }
-    (out_dir / "ltown_prv.meta.json").write_text(json.dumps(meta, indent=2))
+    (out_dir / "ltown_prv.meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return inp

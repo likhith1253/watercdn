@@ -150,7 +150,7 @@ def main() -> None:
                "pmto_task_model_training_tasks": tm.n_train,
                "bckt_mean_transfers_per_run": float(base_runs[base_runs.method == "B3"].bckt_n_transfers.mean()),
                "provenance": provenance(cfg)}
-    (out / "phase6_summary.json").write_text(json.dumps(summary, indent=2, default=float))
+    (out / "phase6_summary.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
 
 
 if __name__ == "__main__":

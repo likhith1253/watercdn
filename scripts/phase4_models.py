@@ -103,7 +103,7 @@ def main() -> None:
                "leakage_audit_label_permuted": table.set_index("model").loc["M5_label_permuted"][
                    ["spearman", "auroc"]].to_dict(),
                "provenance": provenance(cfg)}
-    (out / "phase4_summary.json").write_text(json.dumps(summary, indent=2, default=float))
+    (out / "phase4_summary.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
 
 
 if __name__ == "__main__":

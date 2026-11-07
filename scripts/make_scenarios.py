@@ -33,7 +33,7 @@ def main() -> None:
         "zone_counts_by_split": scen.groupby(["split", "zone"]).size().unstack(fill_value=0).to_dict(),
         "pairs_per_split": pairs.split.value_counts().to_dict(),
     }
-    repo_path(cfg["scenarios"]["manifest"]).write_text(json.dumps(manifest, indent=2))
+    repo_path(cfg["scenarios"]["manifest"]).write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(json.dumps(manifest, indent=2))
 
 

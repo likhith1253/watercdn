@@ -128,7 +128,7 @@ def main() -> None:
                         "feasible_share_at_5Bmax": float(bud.feasible_at_max.mean())},
         "provenance": provenance(cfg),
     }
-    repo_path(args.out).write_text(yaml.safe_dump(out, sort_keys=False))
+    repo_path(args.out).write_text(yaml.safe_dump(out, sort_keys=False), encoding="utf-8")
 
 
 if __name__ == "__main__":

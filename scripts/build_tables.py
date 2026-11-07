@@ -34,10 +34,10 @@ def main() -> None:
     }
     rep_dir = repo_path(cfg["results_dir"]) / "reports"
     rep_dir.mkdir(parents=True, exist_ok=True)
-    (rep_dir / "phase3_quality.json").write_text(json.dumps(report, indent=2, default=float))
+    (rep_dir / "phase3_quality.json").write_text(json.dumps(report, indent=2, default=float), encoding="utf-8")
     print(json.dumps(report, indent=2, default=float))
     d = dictionary({k: t[k] for k in ("pairs", "features", "probe")})
-    repo_path(args.dictionary).write_text(to_markdown(d))
+    repo_path(args.dictionary).write_text(to_markdown(d), encoding="utf-8")
 
 
 if __name__ == "__main__":
