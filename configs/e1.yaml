@@ -21,9 +21,9 @@ de:                         # frozen from configs/generated/de_tuning.yaml (deci
   CR: 0.5
   N: 20
   budget_B: 400
-transfer:                   # frozen after the k/rho grid (docs/decisions.md)
+transfer:                   # frozen from results/e1/pilot/kr_grid.csv (decision D-007)
   k: 3
-  rho: 0.2
+  rho: 0.4
   sigma_frac: 0.03
   min_elite_distance_frac: 0.05
 labels:

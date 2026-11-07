@@ -112,10 +112,9 @@ def test_out_of_bounds_rejected(sim, base):
 def test_failure_returns_penalty_not_exception(sim, base, monkeypatch):
     sim.set_scenario(base)
 
-    def boom(*a, **k):
-        raise en.EpanetError(110, "runH")
+    from tle.hydraulics import kernel
 
-    monkeypatch.setattr(sim.p, "run_h", boom)
+    monkeypatch.setattr(kernel, "run_loop", lambda *a, **k: (110, 0))
     r = sim.simulate(mid_decision(sim))
     assert r["failed"] and r["J"] >= 1e9 and not r["feasible"]
 

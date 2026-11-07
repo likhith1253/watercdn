@@ -20,6 +20,7 @@ PURPOSES = {
     "resplit": 9,
     "baseline": 10,
     "bootstrap": 11,
+    "reference": 14,
     "pilot": 12,
     "sensitivity": 13,
 }

@@ -20,6 +20,7 @@ dependencies = [
     "pyyaml",
     "joblib",
     "networkx",
+    "numba",
 ]
 
 [project.optional-dependencies]

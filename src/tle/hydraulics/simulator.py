@@ -19,13 +19,13 @@ Objective (lower is better), all terms kept separately in the output:
 from __future__ import annotations
 
 import json
-import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
 
 from . import epanet as en
+from . import kernel
 from .scenario import Scenario
 
 FAILURE_J = 1e9
@@ -132,6 +132,11 @@ class Simulator:
         if len(self.tariff) != H:
             raise ValueError("tariff must give one price per hour of the horizon")
         self.lo, self.hi = spec.bounds()
+        self._demand_idx_arr = np.asarray(self.demand_idx, np.int32)
+        self._junction_idx_arr = np.asarray(self.junction_idx, np.int32)
+        self._pump_idx_arr = np.asarray(self.pump_idx, np.int32)
+        self._tank_idx_arr = np.asarray(self.tank_idx, np.int32)
+        self._buf = kernel.new_buffers(len(self.demand_idx), W, len(self.tank_idx))
         self._leak_node_idx: int | None = None
         self.scenario: Scenario | None = None
         p.open_h()
@@ -195,103 +200,60 @@ class Simulator:
             raise ValueError("decision vector outside bounds or of wrong dimension")
         sc, spec, p = self.scenario, self.spec, self.p
         W, H = spec.windows, spec.horizon_h
-        preq = sc.required_pressure_m
-        n_dem = len(self.demand_idx)
-        steps_p = []
-        steps_dt = []
-        steps_t = []
-        leak_m3 = 0.0
-        energy_kwh = 0.0
-        energy_cost = 0.0
-        shortfall_w = np.zeros(W)
-        leak_w = np.zeros(W)
-        unbalanced = False
-        demand_m3 = 0.0  # consumer volume delivered (detail mode only)
-        get_node, get_link = p.get_node, p.get_link
+        b = self._buf
+        for k in ("shortfall_w", "leak_w", "scal"):
+            b[k][:] = 0.0
         try:
             self._apply_decision(x)
             p.init_h()
-            v_start = np.array([get_node(i, en.EN_TANKVOLUME) for i in self.tank_idx])
-            while True:
-                t, code = p.run_h()
-                if code == 1:  # system hydraulically unbalanced (did not converge)
-                    unbalanced = True
-                dt = p.next_h()
-                if t >= H * 3600:
-                    v_end = np.array([get_node(i, en.EN_TANKVOLUME) for i in self.tank_idx])
-                    break
-                if dt <= 0:
-                    raise en.EpanetError(-1, "simulation ended before the horizon")
-                dt_h = dt / 3600.0
-                pres = np.fromiter((get_node(i, en.EN_PRESSURE) for i in self.demand_idx), float, n_dem)
-                w = min(int(t // self.window_s), W - 1)
-                sf = np.maximum(preq - pres, 0.0).sum() * dt_h
-                shortfall_w[w] += sf
-                pl = get_node(self._leak_node_idx, en.EN_PRESSURE)
-                q_leak_lps = self._leak_coeff * math.sqrt(pl) if pl > 0 else 0.0
-                lv = q_leak_lps / 1000.0 * dt
-                leak_m3 += lv
-                leak_w[w] += lv
-                hour = min(int(t // 3600), H - 1)
-                e = sum(get_link(i, en.EN_ENERGY) for i in self.pump_idx) * dt_h
-                energy_kwh += e
-                energy_cost += e * self.tariff[hour]
-                if keep_pressures:
-                    # EN_DEMAND includes emitter (leak) outflow; subtract it
-                    q_all = sum(get_node(i, en.EN_DEMAND) for i in self.junction_idx)
-                    demand_m3 += (q_all - q_leak_lps) / 1000.0 * dt
-                steps_p.append(pres)
-                steps_dt.append(dt_h)
-                steps_t.append(t)
         except en.EpanetError:
             return self._failure(x)
-        if unbalanced:
+        status, n = kernel.run_loop(
+            p._ph.value, self._demand_idx_arr, self._junction_idx_arr, self._leak_node_idx, self._pump_idx_arr,
+            self._tank_idx_arr, H * 3600, self.window_s, W, float(sc.required_pressure_m), float(self._leak_coeff),
+            self.tariff, bool(keep_pressures), b["P"], b["dts"], b["times"], b["shortfall_w"], b["leak_w"],
+            b["scal"], b["v_start"], b["v_end"], b["tbuf"], b["buf"])
+        if status != 0 or n == 0:  # EPANET error, non-convergence or premature end
             return self._failure(x)
-
-        P = np.vstack(steps_p)  # (steps, demand nodes)
-        dts = np.asarray(steps_dt)
+        leak_m3, energy_kwh, energy_cost, demand_m3 = (float(v) for v in b["scal"])
+        v_start, v_end = b["v_start"], b["v_end"]
         if spec.tank_balance == "system":
             tank_def = float(max(v_start.sum() - v_end.sum(), 0.0))
         else:
             tank_def = float(np.maximum(v_start - v_end, 0.0).sum())
+        shortfall_w, leak_w = b["shortfall_w"].copy(), b["leak_w"].copy()
         shortfall = float(shortfall_w.sum())
         wts = spec.weights
         terms = {
             "J_leak": wts.leak * leak_m3,
-            "J_energy": wts.energy * sc.energy_weight_mult * energy_cost,
+            "J_energy": float(wts.energy * sc.energy_weight_mult * energy_cost),
             "J_shortfall": wts.shortfall * shortfall,
             "J_tank": wts.tank * tank_def,
         }
         J = float(sum(terms.values()))
-        # time-weighted pressure distribution over demand nodes
-        flatP = P.ravel()
-        wflat = np.repeat(dts, P.shape[1])
-        order = np.argsort(flatP)
-        cw = np.cumsum(wflat[order]) / wflat.sum()
-        p5 = float(flatP[order][np.searchsorted(cw, 0.05)])
-        p50 = float(flatP[order][np.searchsorted(cw, 0.50)])
+        p_min, p5, p50 = kernel.weighted_stats(b["P"], b["dts"], n)
         out = {
             "J": J,
             **terms,
-            "leak_m3": float(leak_m3),
-            "energy_kwh": float(energy_kwh),
-            "energy_cost": float(energy_cost),
+            "leak_m3": leak_m3,
+            "energy_kwh": energy_kwh,
+            "energy_cost": energy_cost,
             "shortfall_mh": shortfall,
             "tank_deficit_m3": tank_def,
             "violation": shortfall + tank_def,
             "feasible": bool(shortfall <= spec.shortfall_tol_mh and tank_def <= spec.tank_tol_m3),
             "failed": False,
-            "p_min": float(flatP.min()),
-            "p_p5": p5,
-            "p_median": p50,
+            "p_min": float(p_min),
+            "p_p5": float(p5),
+            "p_median": float(p50),
             "shortfall_by_window": shortfall_w.tolist(),
             "leak_by_window": leak_w.tolist(),
         }
         if keep_pressures:
-            out["demand_m3"] = float(demand_m3)
-            out["pressures"] = P
-            out["step_hours"] = dts
-            out["step_times"] = np.asarray(steps_t)
+            out["demand_m3"] = demand_m3
+            out["pressures"] = b["P"][:n].copy()
+            out["step_hours"] = b["dts"][:n].copy()
+            out["step_times"] = b["times"][:n].copy()
         return out
 
     def _failure(self, x: np.ndarray) -> dict:

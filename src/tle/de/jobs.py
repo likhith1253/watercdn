@@ -151,3 +151,41 @@ def run_jobs(jobs: list[tuple[Path, Callable, tuple]], jobs_parallel: int | None
 
     parallel_map(work, todo, jobs=jobs_parallel)
     return len(todo)
+
+
+# ---------------------------------------------------------------- reference evaluation
+def reference_decision(sim) -> np.ndarray:
+    """Mid-range decision used for pre-decision hydraulic state vectors (one evaluation per scenario)."""
+    return (sim.lo + sim.hi) / 2
+
+
+def reference_job(cfg: dict, row: pd.Series, attain_factor: int = 5) -> dict:
+    """Pre-decision information of a scenario plus a long attainability run.
+
+    * state vector: hourly service-node pressures / p_req under the reference decision
+      (the SEETO-style hydraulic state; costs one evaluation, accounted for by B2);
+    * reference signature (tier c, target side);
+    * attainability run: fresh DE with attain_factor * B evaluations (analysis only:
+      tells whether a feasible operation exists and how far B is from convergence).
+    """
+    sim = get_simulator(cfg)
+    N, F, CR, B = de_settings(cfg)
+    sc = to_scenario(row)
+    sim.set_scenario(sc)
+    r = sim.simulate(reference_decision(sim), keep_pressures=True)
+    hourly = [i for i, t in enumerate(r["step_times"]) if t % 3600 == 0]
+    state = (r["pressures"][hourly] / sc.required_pressure_m).ravel()
+    key = ("reference", scenario_int(sc.scenario_id))
+    r_init, r_de, _ = run_streams(seed_sequence(cfg["seed"], *key))
+    ev = Evaluator(sim, sc, attain_factor * B)
+    run_de(ev, N, F, CR, initial_population(sim.lo, sim.hi, N, r_init), r_de)
+    return {
+        "scenario_id": sc.scenario_id,
+        "state_vector": state.astype(np.float32),
+        "ref_signature": hydraulic_signature(sim, sc, reference_decision(sim)),
+        "ref_J": r["J"],
+        "attain": {"Q_init": float(ev.best_so_far[N - 1]), "Q_B": float(ev.best_so_far[B - 1]),
+                   "Q_long": float(ev.best_so_far[-1]), "feasible_long": bool(ev.best_result["feasible"]),
+                   "long_budget": attain_factor * B},
+        "provenance": provenance(cfg),
+    }
