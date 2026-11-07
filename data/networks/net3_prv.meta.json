@@ -1,0 +1,83 @@
+{
+  "name": "net3_prv",
+  "source": "WNTR example Net3.inp",
+  "source_sha256": "ea3e825c4fef0b5cba47fb06301bc85253f18b6364dc96c44d9fb492c40faa52",
+  "inp_sha256": "19208b079fd0bda0dc1083905cefae54337f858f9d491306b98222ee37497424",
+  "wntr_version": "1.5.0",
+  "edits": {
+    "controls_removed": true,
+    "closed_pipes": [
+      "289",
+      "161",
+      "330"
+    ],
+    "prvs": [
+      {
+        "prv": "PRV_A",
+        "upstream_node": "207",
+        "outlet_node": "PRV_A_out",
+        "zone_entry_node": "206",
+        "zone": "A",
+        "closed_pipe": "289"
+      },
+      {
+        "prv": "PRV_B",
+        "upstream_node": "127",
+        "outlet_node": "PRV_B_out",
+        "zone_entry_node": "129",
+        "zone": "B",
+        "closed_pipe": "161"
+      }
+    ]
+  },
+  "zones": {
+    "A": [
+      "206",
+      "208",
+      "209",
+      "211",
+      "213",
+      "215",
+      "217",
+      "219",
+      "225",
+      "229",
+      "231",
+      "237",
+      "239",
+      "241",
+      "243",
+      "247",
+      "249",
+      "251",
+      "253",
+      "255"
+    ],
+    "B": [
+      "129",
+      "131",
+      "139",
+      "141",
+      "143",
+      "145",
+      "147",
+      "149",
+      "15"
+    ]
+  },
+  "pumps": [
+    "10",
+    "335"
+  ],
+  "prvs": [
+    "PRV_A",
+    "PRV_B"
+  ],
+  "required_pressure_m": 20.0,
+  "bulk_nodes": [
+    "123",
+    "15",
+    "203",
+    "35"
+  ]
+}

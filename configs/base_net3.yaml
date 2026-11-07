@@ -1,0 +1,28 @@
+# Problem definition on the edited Net3 network (shared by E0-E3).
+# Values marked "frozen" are recorded in docs/preregistration.md; changes only by dated amendment.
+network:
+  name: net3_prv
+  inp: data/networks/net3_prv.inp
+  meta: data/networks/net3_prv.meta.json
+simulator: epanet-2.2-toolkit   # one simulator for the whole study
+demand_model: PDA
+required_pressure_m: 20.0
+decision:
+  horizon_hours: 24
+  windows: 6                  # 4 h windows
+  pump_speed: [0.4, 1.0]
+  prv_setting_m: [15.0, 45.0]     # above ~40 m the PRVs are fully open on Net3
+objective:
+  # time-of-use tariff per hour (currency/kWh): off-peak 0-7 h and 23-24 h
+  tariff: [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10,
+           0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20,
+           0.10]
+  weights_file: configs/generated/net3_weights.yaml   # produced by scripts/calibrate_weights.py
+  shortfall_tol_mh: 0.001
+  tank_tol_m3: 1.0
+scenario_space:
+  leak_area_m2: [0.0002, 0.005]     # log-uniform, small leak to burst
+  demand_mult: [0.7, 1.3]
+  peak_shift_h: [-3, 3]             # integer, circular shift of the residential pattern
+  pattern_amp: [0.7, 1.3]
+  tank_level_frac: [0.3, 0.8]

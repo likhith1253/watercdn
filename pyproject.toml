@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tle-wdn"
+version = "0.1.0"
+description = "Risk-controlled warm-start transfer decisions for recurring leak-pressure management in water distribution networks"
+requires-python = ">=3.11"
+dependencies = [
+    "wntr==1.5.0",
+    "six",
+    "numpy",
+    "scipy",
+    "pandas",
+    "pyarrow",
+    "scikit-learn",
+    "lightgbm",
+    "matplotlib",
+    "pyyaml",
+    "joblib",
+    "networkx",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
