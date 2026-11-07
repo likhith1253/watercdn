@@ -85,10 +85,10 @@ signed, matched-budget utility. Gradient-boosted predictors trained on scenario,
 features estimate a utility lower bound and a harm probability; the gate transfers from the best-ranked source only
 if its harm probability is below a threshold certified by Learn-then-Test on calibration targets.
 
-## v2: trajectory-monitored and shift-aware decisions
+## Extensions: shift-aware, pooled and monitored decisions
 
-v1 showed where decide-once transfer fails (rare harm on Net3/DE, broken guarantee under layout shift, no
-certification on a new network with few calibration cases). v2 ([docs/v2_plan.md](docs/v2_plan.md)) adds:
+The core experiments show where decide-once transfer fails (rare harm on Net3/DE, broken guarantee under layout
+shift, no certification on a new network with few calibration cases). The extensions ([docs/v2_plan.md](docs/v2_plan.md)) add:
 
 * **trajectory monitoring** (`src/tle/v2/monitor.py`): continue or abort a warm start after g generations, comparing
   the warm run's progress with the expected fresh trajectory; exact offline evaluation from logged runs;

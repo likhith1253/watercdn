@@ -1,0 +1,14 @@
+# L-Town second extension: 60 extra training targets (on top of e4x: 30 train, 70 calibration, 20 test).
+extends: [configs/e4.yaml]
+scenarios:
+  table: data/scenarios/e4y_scenarios.csv
+  pairs: data/scenarios/e4y_pairs.csv
+  manifest: data/scenarios/e4y_manifest.json
+extension:
+  base_table: data/scenarios/e4x_scenarios.csv
+  base_pairs: data/scenarios/e4x_pairs.csv
+  n_extra: 60
+  split: train
+  seed_offset: 11
+  id_start: 2000
+results_dir: results/e4y

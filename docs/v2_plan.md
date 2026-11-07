@@ -1,6 +1,6 @@
-# TLE-WDN v2 — design
+# TLE-WDN extensions — design (shift-aware gate, pooled learning, trajectory monitoring)
 
-v1 measured three concrete failures of decide-once transfer with a fixed calibration set:
+The core experiments measured three concrete failures of decide-once transfer with a fixed calibration set:
 
 1. where harm is common (L-Town, 17% harmful pairs) the gate cannot certify α ≤ 0.20 with 30 calibration targets
    and abstains everywhere, although a ranking alone captures 72% of the oracle;
@@ -8,7 +8,7 @@ v1 measured three concrete failures of decide-once transfer with a fixed calibra
 3. the decision is taken once, before any target evaluation, although the warm run's own trajectory reveals early
    whether the injected elites are leading the search astray.
 
-v2 adds a method for each, evaluated exactly on the logged runs (no new simulations needed for 1–3).
+The extensions add a method for each, evaluated exactly on the logged runs (no new simulations needed for 1–3).
 
 ## V2-A Trajectory-monitored transfer (the TLE core)
 

@@ -22,15 +22,19 @@ def main() -> None:
     cfg = load_config(args.config)
     ext = cfg["extension"]
     base = read_scenarios(ext["base_table"])
-    new = sample_scenarios(cfg, int(ext["n_extra_calibration"]), int(cfg["seed"]) + 7, prefix="e4_",
-                           start=int(ext["id_start"])).assign(split="calibration")
+    split = ext.get("split", "calibration")
+    n_new = int(ext.get("n_extra", ext.get("n_extra_calibration")))
+    new = sample_scenarios(cfg, n_new, int(cfg["seed"]) + int(ext.get("seed_offset", 7)), prefix="e4_",
+                           start=int(ext["id_start"])).assign(split=split)
     scen = pd.concat([base, new], ignore_index=True)
-    pairs_new = pair_manifest(scen, ScenarioDistance(cfg), int(cfg["pairs"]["per_distance_tertile"]), int(cfg["seed"]) + 7)
+    pairs_new = pair_manifest(scen, ScenarioDistance(cfg), int(cfg["pairs"]["per_distance_tertile"]),
+                              int(cfg["seed"]) + int(ext.get("seed_offset", 7)),
+                              target_splits=("train", "calibration", "test"))
     pairs_new = pairs_new[pairs_new.target_id.isin(set(new.scenario_id))]
     pairs = pd.concat([read_pairs(ext["base_pairs"]), pairs_new], ignore_index=True)
     m = {"scenario_table_sha256": write_manifest(scen, cfg["scenarios"]["table"]),
          "pair_manifest_sha256": write_manifest(pairs, cfg["scenarios"]["pairs"]),
-         "n_calibration_targets": int((scen.split == "calibration").sum())}
+         "targets_per_split": scen[scen.split != "library"].split.value_counts().to_dict()}
     repo_path(cfg["scenarios"]["manifest"]).write_text(json.dumps(m, indent=2), encoding="utf-8")
     print(m)
 

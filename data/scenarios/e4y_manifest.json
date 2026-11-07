@@ -1,0 +1,9 @@
+{
+  "scenario_table_sha256": "de981a9d921d31b8fc69469bc097f2089cbe6ccbd6878296c8711acf8615414f",
+  "pair_manifest_sha256": "aac40a379486be2c42e78478c2f9e47b3cb737a0a36b57a7fbe0f1407d88f81b",
+  "targets_per_split": {
+    "train": 90,
+    "calibration": 70,
+    "test": 20
+  }
+}

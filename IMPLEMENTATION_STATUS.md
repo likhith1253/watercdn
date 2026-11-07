@@ -20,7 +20,7 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 | Sensitivity (ε, k, ρ, B), amortisation, report | complete | `results/e1/sensitivity`, `results/e1/reports`, `RESULTS.md`; 700/700 cross-check runs identical |
 | GA optimiser-robustness check | complete | `results/e1/ga_check/` (D-016) |
 | L-Town extension (70 calibration targets) | complete | `results/e4x/` (D-020) |
-| v2: shift-aware gate, pooled calibration, trajectory monitoring | complete | `results/v2/V2_RESULTS.md`, `results/e*/v2/`; 4 tests (D-018–D-020) |
+| Extensions: shift-aware gate, pooled calibration, trajectory monitoring | complete | `results/v2/V2_RESULTS.md`, `results/e*/v2/`; 4 tests (D-018–D-020) |
 | Manuscript (Phase 9) | full draft | `paper/manuscript.md` (authors, AI statement and venue template to be added) |
 | Official BCKT MATLAB run | not done | MATLAB batch error in this environment (D-017) |
 | Zenodo DOI, second-machine reproduction | owner steps | `docs/release.md` |
@@ -58,7 +58,7 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 * C5 benchmark + break-even: benchmark released; the labelled library does not amortise in this cheap-simulation
   setting (break-even ~5 800 tasks).
 
-## v2 outcomes (pre-stated success criteria in docs/v2_plan.md)
+## Extension outcomes (pre-stated success criteria in docs/v2_plan.md)
 
 * V2-B shift-aware gate: **met** — E3 level-3 harm 23% → 0% by abstaining; unchanged decisions on unshifted E1.
 * V2-C pooled calibration: **not met** — L-Town still cannot be certified; pooling is rejected by the shift-aware test.
