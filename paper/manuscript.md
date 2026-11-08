@@ -120,6 +120,12 @@ unshifted E1 decisions unchanged at α = 0.20, and refuses to transfer a Net3 ga
 detectable but harmless shift (E2, stricter pressure requirement), where it abstains and forgoes a utility of 1.38.
 *Pooled calibration.* Calibrating on Net3 and L-Town together "certifies" L-Town only by borrowing Net3's low harm
 rate; the shift-aware variant rejects it.
+*More in-network data.* Adding 60 L-Town training targets (90 in total) raises the out-of-sample harm AUROC from
+0.63 to 0.77–0.80 and the ungated ranking's utility from 1.61 to 1.79 (80.5% of the oracle, 5% harmful test
+decisions) [results/e4y/gate]. The certified gate, however, stays conservative: at α = 0.20 it abstains on 60–85% of
+targets in most of 200 re-splits (harm ≤ α in 95–100% of them), so with 70 calibration targets the guarantee costs
+most of the benefit; pooling Net3 data or ranking with the in-network model and gating with the pooled harm model does
+not remove that cost.
 *Trajectory monitoring.* Watching the warm run for 1–8 generations and aborting to a fresh restart did not help: the
 risk-controlled monitor cannot certify on L-Town and aborts everything, and even a monitor tuned for utility without a
 guarantee converges to "never abort" (L-Town 1.61 vs 1.61; Net3 1.77 vs 1.77). Early progress does not separate
@@ -134,9 +140,11 @@ break-even after about 5 800 future tasks. With millisecond simulations the labe
 
 Three messages survive. First, the benefit of a named warm start is predictable from physical information available
 before the run, while similarity — the selection rule most transfer methods rely on — carries almost no information
-about it. Second, a finite-sample harm bound is easy to hold where harm is rare and impossible to certify where it is
-common unless the harm predictor is strong; on L-Town the bottleneck is harm prediction (AUROC ≈ 0.58), not the
-decision rule. Third, exchangeability is the weak point: layout changes break the guarantee, and a shift-aware gate
+about it. Second, a finite-sample harm bound is easy to hold where harm is rare; where harm is common it can be held, but with
+tens of calibration targets only at a large abstention cost, even when in-network training data lift harm
+discrimination to AUROC ≈ 0.8. The utility ranking keeps improving with data (L-Town: 1.61 → 1.79 from 30 to 90
+training targets), so the practical recommendation is a learned ranking with a certified gate whose strictness is
+matched to the size of the calibration set. Third, exchangeability is the weak point: layout changes break the guarantee, and a shift-aware gate
 restores safety only by abstaining. Limitations: two benchmark networks; cheap simulations; labels from 4–10
 repeats; baselines are re-implementations (the official BCKT code was not run); the GA result shows that findings
 must be stated per optimiser; the shift-aware test is an approximation, not an exact finite-sample guarantee.
