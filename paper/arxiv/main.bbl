@@ -1,0 +1,408 @@
+\begin{thebibliography}{53}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Angelopoulos et~al.(2024)Angelopoulos, Bates, Fisch, Lei, and
+  Schuster]{angelopoulos2024crc}
+Anastasios~N. Angelopoulos, Stephen Bates, Adam Fisch, Lihua Lei, and Tal
+  Schuster.
+\newblock Conformal risk control.
+\newblock In \emph{International Conference on Learning Representations
+  ({ICLR})}, 2024.
+
+\bibitem[Angelopoulos et~al.(2025)Angelopoulos, Bates, Cand{\`e}s, Jordan, and
+  Lei]{angelopoulos2025ltt}
+Anastasios~N. Angelopoulos, Stephen Bates, Emmanuel~J. Cand{\`e}s, Michael~I.
+  Jordan, and Lihua Lei.
+\newblock Learn then test: Calibrating predictive algorithms to achieve risk
+  control.
+\newblock \emph{The Annals of Applied Statistics}, 19\penalty0 (2):\penalty0
+  1641--1662, 2025.
+\newblock \doi{10.1214/24-AOAS1998}.
+
+\bibitem[Araujo et~al.(2006)Araujo, Ramos, and Coelho]{araujo2006pressure}
+L.~S. Araujo, H.~Ramos, and S.~T. Coelho.
+\newblock Pressure control for leakage minimisation in water distribution
+  systems management.
+\newblock \emph{Water Resources Management}, 20\penalty0 (1):\penalty0
+  133--149, 2006.
+\newblock \doi{10.1007/s11269-006-4635-3}.
+
+\bibitem[Bartz-Beielstein et~al.(2020)Bartz-Beielstein, Doerr, van~den Berg,
+  Bossek, Chandrasekaran, Eftimov, Fischbach, Kerschke, La~Cava,
+  L{\'o}pez-Ib{\'a}{\~n}ez, Malan, Moore, Naujoks, Orzechowski, Volz, Wagner,
+  and Weise]{bartzbeielstein2020benchmarking}
+Thomas Bartz-Beielstein, Carola Doerr, Daan van~den Berg, Jakob Bossek, Sowmya
+  Chandrasekaran, Tome Eftimov, Andreas Fischbach, Pascal Kerschke, William
+  La~Cava, Manuel L{\'o}pez-Ib{\'a}{\~n}ez, Katherine~M. Malan, Jason~H. Moore,
+  Boris Naujoks, Patryk Orzechowski, Vanessa Volz, Markus Wagner, and Thomas
+  Weise.
+\newblock Benchmarking in optimization: Best practice and open issues.
+\newblock arXiv preprint arXiv:2007.03488, 2020.
+
+\bibitem[Bates et~al.(2021)Bates, Angelopoulos, Lei, Malik, and
+  Jordan]{bates2021rcps}
+Stephen Bates, Anastasios Angelopoulos, Lihua Lei, Jitendra Malik, and
+  Michael~I. Jordan.
+\newblock Distribution-free, risk-controlling prediction sets.
+\newblock \emph{Journal of the {ACM}}, 68\penalty0 (6):\penalty0 1--34, 2021.
+\newblock \doi{10.1145/3478535}.
+
+\bibitem[Bickel et~al.(2009)Bickel, Br{\"u}ckner, and
+  Scheffer]{bickel2009discriminative}
+Steffen Bickel, Michael Br{\"u}ckner, and Tobias Scheffer.
+\newblock Discriminative learning under covariate shift.
+\newblock \emph{Journal of Machine Learning Research}, 10:\penalty0 2137--2155,
+  2009.
+
+\bibitem[Cherkaoui et~al.(2025)Cherkaoui, Halconruy, and
+  Petetin]{cherkaoui2025when}
+Hamza Cherkaoui, H{\'e}l{\`e}ne Halconruy, and Yohan Petetin.
+\newblock When to transfer: Adaptive source selection for positive transfer in
+  linear models.
+\newblock arXiv preprint arXiv:2510.16986, 2025.
+
+\bibitem[Clopper and Pearson(1934)]{clopper1934binomial}
+C.~J. Clopper and E.~S. Pearson.
+\newblock The use of confidence or fiducial limits illustrated in the case of
+  the binomial.
+\newblock \emph{Biometrika}, 26\penalty0 (4):\penalty0 404--413, 1934.
+\newblock \doi{10.1093/biomet/26.4.404}.
+
+\bibitem[Creaco and Pezzinga(2018)]{creaco2018comparison}
+Enrico Creaco and Giuseppe Pezzinga.
+\newblock Comparison of algorithms for the optimal location of control valves
+  for leakage reduction in {WDNs}.
+\newblock \emph{Water}, 10\penalty0 (4):\penalty0 466, 2018.
+\newblock \doi{10.3390/w10040466}.
+
+\bibitem[Da et~al.(2019)Da, Gupta, and Ong]{da2019curbing}
+Bingshui Da, Abhishek Gupta, and Yew-Soon Ong.
+\newblock Curbing negative influences online for seamless transfer evolutionary
+  optimization.
+\newblock \emph{{IEEE} Transactions on Cybernetics}, 49\penalty0 (12):\penalty0
+  4365--4378, 2019.
+\newblock \doi{10.1109/TCYB.2018.2864345}.
+
+\bibitem[Deb and Agrawal(1995)]{deb1995sbx}
+Kalyanmoy Deb and Ram~Bhushan Agrawal.
+\newblock Simulated binary crossover for continuous search space.
+\newblock \emph{Complex Systems}, 9\penalty0 (2):\penalty0 115--148, 1995.
+
+\bibitem[Fang et~al.(2026)Fang, Li, and Yang]{fang2026seeto}
+Heping Fang, Bingdong Li, and Peng Yang.
+\newblock Efficient parameter calibration of numerical weather prediction
+  models via evolutionary sequential transfer optimization, 2026.
+
+\bibitem[Feng et~al.(2017)Feng, Ong, Jiang, and Gupta]{feng2017autoencoding}
+Liang Feng, Yew-Soon Ong, Siwei Jiang, and Abhishek Gupta.
+\newblock Autoencoding evolutionary search with learning across heterogeneous
+  problems.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 21\penalty0
+  (5):\penalty0 760--772, 2017.
+\newblock \doi{10.1109/TEVC.2017.2682274}.
+
+\bibitem[Feurer et~al.(2015)Feurer, Springenberg, and
+  Hutter]{feurer2015initializing}
+Matthias Feurer, Jost~Tobias Springenberg, and Frank Hutter.
+\newblock Initializing {B}ayesian hyperparameter optimization via
+  meta-learning.
+\newblock In \emph{Proceedings of the {AAAI} Conference on Artificial
+  Intelligence}, volume~29, 2015.
+\newblock \doi{10.1609/aaai.v29i1.9354}.
+
+\bibitem[Friedman(1937)]{friedman1937ranks}
+Milton Friedman.
+\newblock The use of ranks to avoid the assumption of normality implicit in the
+  analysis of variance.
+\newblock \emph{Journal of the American Statistical Association}, 32\penalty0
+  (200):\penalty0 675--701, 1937.
+\newblock \doi{10.1080/01621459.1937.10503522}.
+
+\bibitem[Geifman and El-Yaniv(2017)]{geifman2017selective}
+Yonatan Geifman and Ran El-Yaniv.
+\newblock Selective classification for deep neural networks.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30, pages 4878--4887, 2017.
+
+\bibitem[Gupta et~al.(2016)Gupta, Ong, and Feng]{gupta2016multifactorial}
+Abhishek Gupta, Yew-Soon Ong, and Liang Feng.
+\newblock Multifactorial evolution: Toward evolutionary multitasking.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 20\penalty0
+  (3):\penalty0 343--357, 2016.
+\newblock \doi{10.1109/TEVC.2015.2458037}.
+
+\bibitem[Gupta et~al.(2018)Gupta, Ong, and Feng]{gupta2018insights}
+Abhishek Gupta, Yew-Soon Ong, and Liang Feng.
+\newblock Insights on transfer optimization: Because experience is the best
+  teacher.
+\newblock \emph{{IEEE} Transactions on Emerging Topics in Computational
+  Intelligence}, 2\penalty0 (1):\penalty0 51--64, 2018.
+\newblock \doi{10.1109/TETCI.2017.2769104}.
+
+\bibitem[Holm(1979)]{holm1979simple}
+Sture Holm.
+\newblock A simple sequentially rejective multiple test procedure.
+\newblock \emph{Scandinavian Journal of Statistics}, 6\penalty0 (2):\penalty0
+  65--70, 1979.
+\newblock \doi{10.2307/4615733}.
+
+\bibitem[Jankovic et~al.(2022)Jankovic, Vermetten, Kostovska, de~Nobel,
+  Eftimov, and Doerr]{jankovic2022trajectory}
+Anja Jankovic, Diederick Vermetten, Ana Kostovska, Jacob de~Nobel, Tome
+  Eftimov, and Carola Doerr.
+\newblock Trajectory-based algorithm selection with warm-starting.
+\newblock In \emph{2022 {IEEE} Congress on Evolutionary Computation ({CEC})},
+  pages 1--8, 2022.
+\newblock \doi{10.1109/CEC55065.2022.9870222}.
+
+\bibitem[Ke et~al.(2017)Ke, Meng, Finley, Wang, Chen, Ma, Ye, and
+  Liu]{ke2017lightgbm}
+Guolin Ke, Qi~Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei
+  Ye, and Tie-Yan Liu.
+\newblock {LightGBM}: A highly efficient gradient boosting decision tree.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30, pages 3146--3154, 2017.
+
+\bibitem[Kerschke et~al.(2019)Kerschke, Hoos, Neumann, and
+  Trautmann]{kerschke2019aas}
+Pascal Kerschke, Holger~H. Hoos, Frank Neumann, and Heike Trautmann.
+\newblock Automated algorithm selection: Survey and perspectives.
+\newblock \emph{Evolutionary Computation}, 27\penalty0 (1):\penalty0 3--45,
+  2019.
+\newblock \doi{10.1162/evco_a_00242}.
+
+\bibitem[Kish(1965)]{kish1965survey}
+Leslie Kish.
+\newblock \emph{Survey Sampling}.
+\newblock John Wiley \& Sons, New York, 1965.
+
+\bibitem[Klise et~al.(2017)Klise, Bynum, Moriarty, and Murray]{klise2017wntr}
+Katherine~A. Klise, Michael Bynum, Dylan Moriarty, and Regan Murray.
+\newblock A software framework for assessing the resilience of drinking water
+  systems to disasters with an example earthquake case study.
+\newblock \emph{Environmental Modelling \& Software}, 95:\penalty0 420--431,
+  2017.
+\newblock \doi{10.1016/j.envsoft.2017.06.022}.
+
+\bibitem[Koenker and Bassett(1978)]{koenker1978quantiles}
+Roger Koenker and Gilbert Bassett.
+\newblock Regression quantiles.
+\newblock \emph{Econometrica}, 46\penalty0 (1), 1978.
+\newblock \doi{10.2307/1913643}.
+
+\bibitem[Law(2015)]{law2015simulation}
+Averill~M. Law.
+\newblock \emph{Simulation Modeling and Analysis}.
+\newblock McGraw-Hill Education, New York, 5th edition, 2015.
+
+\bibitem[Li et~al.(2024)Li, Chen, and Yao]{li2024datadriven}
+Ke~Li, Renzhi Chen, and Xin Yao.
+\newblock A data-driven evolutionary transfer optimization for expensive
+  problems in dynamic environments.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 28\penalty0
+  (5):\penalty0 1396--1411, 2024.
+\newblock \doi{10.1109/TEVC.2023.3307244}.
+
+\bibitem[Lu et~al.(2025)Lu, Xue, Zhang, Zhang, Chen, Cao, Liu, and
+  Tan]{lu2025bckt}
+Yi~Lu, Xiaoming Xue, Kai Zhang, Liming Zhang, Guodong Chen, Chenming Cao,
+  Piyang Liu, and Kay~Chen Tan.
+\newblock Multi-task surrogate-assisted search with {B}ayesian competitive
+  knowledge transfer for expensive optimization.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 2025.
+\newblock \doi{10.1109/TEVC.2025.3644480}.
+
+\bibitem[Mala-Jetmarova et~al.(2017)Mala-Jetmarova, Sultanova, and
+  Savic]{malajetmarova2017lost}
+Helena Mala-Jetmarova, Nargiz Sultanova, and Dragan Savic.
+\newblock Lost in optimisation of water distribution systems? {A} literature
+  review of system operation.
+\newblock \emph{Environmental Modelling \& Software}, 93:\penalty0 209--254,
+  2017.
+\newblock \doi{10.1016/j.envsoft.2017.02.009}.
+
+\bibitem[Nomura et~al.(2021)Nomura, Watanabe, Akimoto, Ozaki, and
+  Onishi]{nomura2021warm}
+Masahiro Nomura, Shuhei Watanabe, Youhei Akimoto, Yoshihiko Ozaki, and Masaki
+  Onishi.
+\newblock Warm starting {CMA-ES} for hyperparameter optimization.
+\newblock In \emph{Proceedings of the {AAAI} Conference on Artificial
+  Intelligence}, volume~35, pages 9188--9196, 2021.
+\newblock \doi{10.1609/aaai.v35i10.17109}.
+
+\bibitem[Nosek et~al.(2018)Nosek, Ebersole, DeHaven, and
+  Mellor]{nosek2018preregistration}
+Brian~A. Nosek, Charles~R. Ebersole, Alexander~C. DeHaven, and David~T. Mellor.
+\newblock The preregistration revolution.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 115\penalty0
+  (11):\penalty0 2600--2606, 2018.
+\newblock \doi{10.1073/pnas.1708274114}.
+
+\bibitem[Osaba et~al.(2022)Osaba, Del~Ser, Martinez, and
+  Hussain]{osaba2022emto}
+Eneko Osaba, Javier Del~Ser, Aritz~D. Martinez, and Amir Hussain.
+\newblock Evolutionary multitask optimization: A methodological overview,
+  challenges, and future research directions.
+\newblock \emph{Cognitive Computation}, 14\penalty0 (3):\penalty0 927--954,
+  2022.
+\newblock \doi{10.1007/s12559-022-10012-8}.
+
+\bibitem[Pan and Yang(2010)]{pan2010survey}
+Sinno~Jialin Pan and Qiang Yang.
+\newblock A survey on transfer learning.
+\newblock \emph{{IEEE} Transactions on Knowledge and Data Engineering},
+  22\penalty0 (10):\penalty0 1345--1359, 2010.
+\newblock \doi{10.1109/TKDE.2009.191}.
+
+\bibitem[Platt(1999)]{platt1999probabilistic}
+John~C. Platt.
+\newblock Probabilistic outputs for support vector machines and comparisons to
+  regularized likelihood methods.
+\newblock In \emph{Advances in Large Margin Classifiers}. MIT Press, 1999.
+
+\bibitem[Poloczek et~al.(2016)Poloczek, Wang, and Frazier]{poloczek2016warm}
+Matthias Poloczek, Jialei Wang, and Peter~I. Frazier.
+\newblock Warm starting {B}ayesian optimization.
+\newblock In \emph{2016 Winter Simulation Conference ({WSC})}, pages 770--781,
+  2016.
+\newblock \doi{10.1109/WSC.2016.7822140}.
+
+\bibitem[Renau and Hart(2024)]{renau2024probing}
+Quentin Renau and Emma Hart.
+\newblock On the utility of probing trajectories for algorithm-selection.
+\newblock In \emph{Applications of Evolutionary Computation ({EvoApplications}
+  2024)}, Lecture Notes in Computer Science, pages 98--114. Springer, 2024.
+\newblock \doi{10.1007/978-3-031-56852-7_7}.
+
+\bibitem[Rosenstein et~al.(2005)Rosenstein, Marx, Kaelbling, and
+  Dietterich]{rosenstein2005transfer}
+Michael~T. Rosenstein, Zvika Marx, Leslie~Pack Kaelbling, and Thomas~G.
+  Dietterich.
+\newblock To transfer or not to transfer.
+\newblock In \emph{{NIPS} 2005 Workshop on Inductive Transfer: 10 Years Later},
+  2005.
+
+\bibitem[Rossman et~al.(2020)Rossman, Woo, Tryby, Shang, Janke, and
+  Haxton]{rossman2020epanet}
+Lewis~A. Rossman, Hyoungmin Woo, Michael Tryby, Feng Shang, Robert Janke, and
+  Terranna Haxton.
+\newblock {EPANET} 2.2 user manual.
+\newblock Technical Report EPA/600/R-20/133, U.S. Environmental Protection
+  Agency, Cincinnati, OH, 2020.
+
+\bibitem[Storn and Price(1997)]{storn1997de}
+Rainer Storn and Kenneth Price.
+\newblock Differential evolution -- a simple and efficient heuristic for global
+  optimization over continuous spaces.
+\newblock \emph{Journal of Global Optimization}, 11\penalty0 (4):\penalty0
+  341--359, 1997.
+\newblock \doi{10.1023/A:1008202821328}.
+
+\bibitem[Tan et~al.(2021)Tan, Feng, and Jiang]{tan2021eto}
+Kay~Chen Tan, Liang Feng, and Min Jiang.
+\newblock Evolutionary transfer optimization -- a new frontier in evolutionary
+  computation research.
+\newblock \emph{{IEEE} Computational Intelligence Magazine}, 16\penalty0
+  (1):\penalty0 22--33, 2021.
+\newblock \doi{10.1109/MCI.2020.3039066}.
+
+\bibitem[Tibshirani et~al.(2019)Tibshirani, Foygel~Barber, Cand{\`e}s, and
+  Ramdas]{tibshirani2019covariate}
+Ryan~J. Tibshirani, Rina Foygel~Barber, Emmanuel~J. Cand{\`e}s, and Aaditya
+  Ramdas.
+\newblock Conformal prediction under covariate shift.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~32, pages 2530--2540, 2019.
+
+\bibitem[Vairavamoorthy and Lumbers(1998)]{vairavamoorthy1998leakage}
+Kalanithy Vairavamoorthy and Jeremy Lumbers.
+\newblock Leakage reduction in water distribution systems: Optimal valve
+  control.
+\newblock \emph{Journal of Hydraulic Engineering}, 124\penalty0 (11):\penalty0
+  1146--1154, 1998.
+\newblock \doi{10.1061/(ASCE)0733-9429(1998)124:11(1146)}.
+
+\bibitem[van Zyl et~al.(2004)van Zyl, Savic, and
+  Walters]{vanzyl2004operational}
+Jakobus~E. van Zyl, Dragan~A. Savic, and Godfrey~A. Walters.
+\newblock Operational optimization of water distribution systems using a hybrid
+  genetic algorithm.
+\newblock \emph{Journal of Water Resources Planning and Management},
+  130\penalty0 (2):\penalty0 160--170, 2004.
+\newblock \doi{10.1061/(ASCE)0733-9496(2004)130:2(160)}.
+
+\bibitem[Vovk et~al.(2005)Vovk, Gammerman, and Shafer]{vovk2005alrw}
+Vladimir Vovk, Alex Gammerman, and Glenn Shafer.
+\newblock \emph{Algorithmic Learning in a Random World}.
+\newblock Springer, New York, 2005.
+
+\bibitem[Vrachimis et~al.(2022)Vrachimis, Eliades, Taormina, Kapelan, Ostfeld,
+  Liu, Kyriakou, Pavlou, Qiu, and Polycarpou]{vrachimis2022battledim}
+Stelios~G. Vrachimis, Demetrios~G. Eliades, Riccardo Taormina, Zoran Kapelan,
+  Avi Ostfeld, Shuming Liu, Marios Kyriakou, Pavlos Pavlou, Mengning Qiu, and
+  Marios~M. Polycarpou.
+\newblock Battle of the leakage detection and isolation methods.
+\newblock \emph{Journal of Water Resources Planning and Management},
+  148\penalty0 (12), 2022.
+\newblock \doi{10.1061/(ASCE)WR.1943-5452.0001601}.
+
+\bibitem[Wagner et~al.(1988)Wagner, Shamir, and Marks]{wagner1988reliability}
+Janet~M. Wagner, Uri Shamir, and David~H. Marks.
+\newblock Water distribution reliability: Simulation methods.
+\newblock \emph{Journal of Water Resources Planning and Management},
+  114\penalty0 (3):\penalty0 276--294, 1988.
+\newblock \doi{10.1061/(ASCE)0733-9496(1988)114:3(276)}.
+
+\bibitem[Wang et~al.(2025)Wang, Li, Jiao, Zhao, Liu, and Yang]{wang2025okaem}
+Chao Wang, Lingling Li, Licheng Jiao, Jiaxuan Zhao, Fang Liu, and Shuyuan Yang.
+\newblock Learning evolution via optimization knowledge adaptation.
+\newblock arXiv preprint arXiv:2501.02200, 2025.
+
+\bibitem[Wang et~al.(2019)Wang, Dai, P{\'o}czos, and
+  Carbonell]{wang2019negative}
+Zirui Wang, Zihang Dai, Barnab{\'a}s P{\'o}czos, and Jaime Carbonell.
+\newblock Characterizing and avoiding negative transfer.
+\newblock In \emph{2019 {IEEE/CVF} Conference on Computer Vision and Pattern
+  Recognition ({CVPR})}, pages 11285--11294, 2019.
+\newblock \doi{10.1109/CVPR.2019.01155}.
+
+\bibitem[Wei et~al.(2025)Wei, Liu, Gupta, Tan, and Ong]{wei2025pmto}
+Tingyang Wei, Jiao Liu, Abhishek Gupta, Puay~Siew Tan, and Yew-Soon Ong.
+\newblock $(\theta_l, \theta_u)$-parametric multi-task optimization: Joint
+  search in solution and infinite task spaces.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 2025.
+\newblock \doi{10.1109/TEVC.2025.3598333}.
+
+\bibitem[Wilcoxon(1945)]{wilcoxon1945individual}
+Frank Wilcoxon.
+\newblock Individual comparisons by ranking methods.
+\newblock \emph{Biometrics Bulletin}, 1\penalty0 (6), 1945.
+\newblock \doi{10.2307/3001968}.
+
+\bibitem[Xue et~al.(2024{\natexlab{a}})Xue, Hu, Feng, Zhang, Song, and
+  Tan]{xue2024competitive}
+Xiaoming Xue, Yao Hu, Liang Feng, Kai Zhang, Linqi Song, and Kay~Chen Tan.
+\newblock Surrogate-assisted search with competitive knowledge transfer for
+  expensive optimization.
+\newblock arXiv preprint arXiv:2408.07176, 2024{\natexlab{a}}.
+
+\bibitem[Xue et~al.(2024{\natexlab{b}})Xue, Yang, Feng, Zhang, Song, and
+  Tan]{xue2024solution}
+Xiaoming Xue, Cuie Yang, Liang Feng, Kai Zhang, Linqi Song, and Kay~Chen Tan.
+\newblock Solution transfer in evolutionary optimization: An empirical study on
+  sequential transfer.
+\newblock \emph{{IEEE} Transactions on Evolutionary Computation}, 28\penalty0
+  (6):\penalty0 1776--1793, 2024{\natexlab{b}}.
+\newblock \doi{10.1109/TEVC.2023.3339506}.
+
+\bibitem[Xue et~al.(2025)Xue, Feng, Feng, Liu, Zhang, and Tan]{xue2025analogy}
+Xiaoming Xue, Liang Feng, Yinglan Feng, Rui Liu, Kai Zhang, and Kay~Chen Tan.
+\newblock A theoretical analysis of analogy-based evolutionary transfer
+  optimization.
+\newblock arXiv preprint arXiv:2503.21156, 2025.
+
+\end{thebibliography}
