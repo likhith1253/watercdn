@@ -1,0 +1,107 @@
+{
+  "retrained_gate": [
+    {
+      "method": "retrained gate a=0.10",
+      "alpha": 0.1,
+      "lambda": NaN,
+      "n_targets": 35,
+      "n_accepted": 0,
+      "abstention_rate": 1.0,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.0,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 2.112694015049545,
+      "share_oracle_captured": 0.0,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 1.0
+    },
+    {
+      "method": "retrained gate a=0.20",
+      "alpha": 0.2,
+      "lambda": 0.04751711334330091,
+      "n_targets": 35,
+      "n_accepted": 12,
+      "abstention_rate": 0.6571428571428571,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.5673942337805238,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 1.5452997812690217,
+      "share_oracle_captured": 0.26856432107004274,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 0.2646484693970512
+    }
+  ],
+  "lookup_baselines": [
+    {
+      "method": "B0 fresh",
+      "mean_U": 0.0,
+      "harm_rate_all": 0.0,
+      "abstention": 1.0,
+      "oracle_mean_U": 2.112694015049545
+    },
+    {
+      "method": "B1 nearest",
+      "mean_U": 1.0116995412229337,
+      "harm_rate_all": 0.11428571428571428,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.112694015049545
+    },
+    {
+      "method": "B2 similarity top-1",
+      "mean_U": 1.1955872320443812,
+      "harm_rate_all": 0.11428571428571428,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.112694015049545
+    },
+    {
+      "method": "B5 historical",
+      "mean_U": 1.2327891542179659,
+      "harm_rate_all": 0.08571428571428572,
+      "abstention": 0.02857142857142858,
+      "oracle_mean_U": 2.112694015049545
+    },
+    {
+      "method": "M5 retrained ungated",
+      "mean_U": 1.5359375210381963,
+      "harm_rate_all": 0.08571428571428572,
+      "abstention": 0.0,
+      "oracle_mean_U": 2.112694015049545
+    }
+  ],
+  "library_size": [
+    {
+      "library_size": 5,
+      "draw": 99.5,
+      "mean_utility_gate": 0.19677154556430274,
+      "oracle_mean_utility": 0.8704348789425316
+    },
+    {
+      "library_size": 10,
+      "draw": 99.5,
+      "mean_utility_gate": 0.36439579598400107,
+      "oracle_mean_utility": 1.4517839045514072
+    },
+    {
+      "library_size": 15,
+      "draw": 99.5,
+      "mean_utility_gate": 0.48335651035282284,
+      "oracle_mean_utility": 1.8418335959436334
+    },
+    {
+      "library_size": 20,
+      "draw": 0.0,
+      "mean_utility_gate": 0.5673942337805238,
+      "oracle_mean_utility": 2.112694015049545
+    }
+  ],
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "a0618f940ba3-dirty",
+    "config_hash": "333fa981444f"
+  }
+}

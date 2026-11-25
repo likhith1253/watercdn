@@ -149,6 +149,30 @@ def results_md(cfg: dict, amort: dict, xcheck: dict) -> str:
     if f.exists():
         L += ["## E4: gate retrained on L-Town", "", md_table(pd.read_csv(f), ["method", "lambda", "n_targets", "n_accepted",
               "harm_rate_among_accepted", "abstention_rate", "mean_utility", "share_oracle_captured"]), ""]
+    f = r / "e4z/phase7/gate_results.csv"
+    if f.exists():
+        L += ["## E4z: enlarged held-out L-Town test (35 targets)", "",
+              "The E4y training (90) and calibration (70) sets and the E4 protocol are frozen; E4z adds 15 independent test targets. "
+              "The exact confidence bound is descriptive under this network shift and does not itself establish the original risk guarantee.", "",
+              md_table(pd.read_csv(f), ["group", "lambda_source", "alpha", "n_targets", "n_accepted",
+                       "harm_rate_among_accepted", "harm_CP_hi", "abstention_rate", "mean_utility",
+                       "share_oracle_captured"]), ""]
+        a = r / "e4z/phase7/predictor_accuracy.csv"
+        if a.exists():
+            L += ["Frozen E1 predictor across the E4z scenarios (585 pairs):", "",
+                  md_table(pd.read_csv(a), ["group", "n_pairs", "harm_share", "U_mean", "spearman", "auroc", "mae"]), ""]
+        f = r / "e4z/phase7/e4_retrained_gate.csv"
+        if f.exists():
+            L += ["### E4z gate retrained on L-Town", "",
+                  md_table(pd.read_csv(f), ["method", "lambda", "n_targets", "n_accepted",
+                       "harm_rate_among_accepted", "harm_CP_hi", "abstention_rate", "mean_utility",
+                       "share_oracle_captured"]), ""]
+        f = r / "e4z/phase7/e4_lookup_policies.csv"
+        if f.exists():
+            pol = pd.read_csv(f).groupby("method").agg(
+                mean_utility=("U", "mean"), harm_rate=("harm", "mean"),
+                abstention_rate=("accepted", lambda s: 1 - s.mean())).reset_index()
+            L += ["### E4z ungated policies", "", md_table(pol, list(pol.columns)), ""]
     f = r / "e1/sensitivity/t4_sensitivity.csv"
     if f.exists():
         L += ["## T4 sensitivity (no retuning)", "", md_table(pd.read_csv(f), list(pd.read_csv(f).columns)), ""]

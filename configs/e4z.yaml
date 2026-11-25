@@ -1,0 +1,15 @@
+# E4 test-size extension: retain the frozen E4y training/calibration data and
+# add 15 independent test scenarios. All methods and DE settings stay fixed.
+extends: [configs/e4y.yaml]
+scenarios:
+  table: data/scenarios/e4z_scenarios.csv
+  pairs: data/scenarios/e4z_pairs.csv
+  manifest: data/scenarios/e4z_manifest.json
+extension:
+  base_table: data/scenarios/e4y_scenarios.csv
+  base_pairs: data/scenarios/e4y_pairs.csv
+  n_extra: 15
+  split: test
+  seed_offset: 31
+  id_start: 3000
+results_dir: results/e4z

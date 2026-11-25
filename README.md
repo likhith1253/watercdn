@@ -70,9 +70,17 @@ Stage by stage (each script documents itself with `--help`):
 | baselines B0–B7, oracle, statistics | `phase6_baselines.py` | `results/e1/phase6/`, `figures/f7_*` |
 | goal / layout shift | `make_shift_scenarios.py`, `phase7_shift.py` | `results/e2/`, `results/e3/` |
 | held-out network | `e4_prepare.py`, `phase7_shift.py`, `phase7_e4.py` | `results/e4/` |
+| larger L-Town holdout (E4z) | `e4z_campaign.py`, `e4z_build_tables.py`, `phase7_shift.py`, `phase7_e4.py` | `configs/e4z.yaml`, `results/e4z/` |
 | sensitivity, amortisation, report | `sensitivity.py`, `phase8_report.py` | `results/e1/sensitivity/`, `RESULTS.md` |
 
 Set `TLE_JOBS` to limit worker processes (default: CPUs − 1).
+
+E4z reuses the committed E4y training and calibration aggregates and adds 15
+independent L-Town test scenarios (35 total). Reproduce its simulations and
+analysis with `scripts/e4z_campaign.py --jobs 8`, then
+`scripts/e4z_build_tables.py`, `scripts/phase7_shift.py --config configs/e4z.yaml`,
+and `scripts/phase7_e4.py --config configs/e4z.yaml`. The simulation runner
+resumes completed jobs if interrupted.
 
 ## Method in one paragraph
 

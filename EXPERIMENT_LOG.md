@@ -84,5 +84,16 @@ never transfers for m ≤ 30 at α = 0.10; ≥ 92% never-transfer at α = 0.20).
 1.61 (72% of oracle), 5% harmful; B2 similarity 1.30, B1 nearest 0.79, B5 historical 0.77. Oracle utility grows
 with library size (5 → 20 runs: 0.96 → 2.22).
 
+### E4z larger held-out test (`configs/e4z.yaml`, `results/e4z/`)
+
+The E4y training (90) and calibration (70) splits are frozen; the independent test split grows from 20 to 35
+targets using 15 new scenarios. The three-source, four-repeat, B = 1000 protocol is unchanged. All six split and
+leakage checks pass; the 15 new targets have zero failed optimizer simulations (the combined quality report's
+15 failures are in the old E4y rows). Across 35 test targets, the frozen E1 gate accepts all and observes 1 harm
+(2.9%; exact 95% upper bound 14.9%). The retrained gate abstains at α = 0.10; at α = 0.20 it accepts 12/35,
+with zero observed harms but a 26.5% exact upper bound. Frozen-network-to-L-Town predictor accuracy remains weak
+(utility Spearman 0.108, harm AUROC 0.586). The larger holdout tightens descriptive uncertainty but does not
+establish an α = 0.10 guarantee; results remain benchmark evidence, not operational validation (D-022).
+
 ### Timing (`docs/timing.md`, idle machine)
 Median seconds per evaluation: Net3-PRV 0.0036 s (WNTR EpanetSimulator 0.097 s per run); L-Town-PRV (782 junctions) 0.028 s (WNTR 0.43 s).

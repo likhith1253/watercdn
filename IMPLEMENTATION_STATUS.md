@@ -16,7 +16,8 @@ Last updated 2026-11-07. "Verified" means executed end to end with the outputs n
 | Learn-then-Test gate, re-splits, operator check, probe mode | complete | `results/e1/phase5/`; 4 gate tests |
 | Baselines B0–B7 + oracle (SEETO-, BCKT-, PMTO-style) | complete | `results/e1/phase6/` (400 run-based baseline runs) |
 | E2 goal change, E3 layout change | complete | `results/e2/phase7`, `results/e3/phase7` |
-| E4 held-out L-Town | complete (lean design, D-013) | `results/e4/` (240 pairs; frozen, recalibrated, retrained gates) |
+| E4 held-out L-Town | complete (lean design, D-013) | `results/e4/` (240 pairs; frozen, recalibrated, retrained gates); E4z adds a 35-target holdout |
+| E4z larger held-out test | complete | 15 new test scenarios; 585 combined pairs; zero failures on new runs; split/leakage audit passed (`results/e4z/`) |
 | Sensitivity (ε, k, ρ, B), amortisation, report | complete | `results/e1/sensitivity`, `results/e1/reports`, `RESULTS.md`; 700/700 cross-check runs identical |
 | GA optimiser-robustness check | complete | `results/e1/ga_check/` (D-016) |
 | L-Town extension (70 calibration targets) | complete | `results/e4x/` (D-020) |

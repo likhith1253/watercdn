@@ -153,6 +153,40 @@ Utilities are in units of the fresh-run seed standard deviation (σ_fresh); posi
 | retrained gate a=0.10 |  | 20 | 0 | 0.000 | 1.000 | 0.000 | 0.000 |
 | retrained gate a=0.20 |  | 20 | 0 | 0.000 | 1.000 | 0.000 | 0.000 |
 
+## E4z: enlarged held-out L-Town test (35 targets)
+
+The E4y training (90) and calibration (70) sets and the E4 protocol are frozen; E4z adds 15 independent test targets. The exact confidence bound is descriptive under this network shift and does not itself establish the original risk guarantee.
+
+| group | lambda_source | alpha | n_targets | n_accepted | harm_rate_among_accepted | harm_CP_hi | abstention_rate | mean_utility | share_oracle_captured |
+|---|---|---|---|---|---|---|---|---|---|
+| all | frozen E1 | 0.100 | 35 | 35 | 0.029 | 0.149 | 0.000 | 1.458 | 0.690 |
+| all | recalibrated | 0.100 | 35 | 0 | 0.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+| all | frozen E1 | 0.200 | 35 | 35 | 0.029 | 0.149 | 0.000 | 1.458 | 0.690 |
+| all | recalibrated | 0.200 | 35 | 0 | 0.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+
+Frozen E1 predictor across the E4z scenarios (585 pairs):
+
+| group | n_pairs | harm_share | U_mean | spearman | auroc | mae |
+|---|---|---|---|---|---|---|
+| all | 585 | 0.162 | 0.635 | 0.108 | 0.586 | 1.646 |
+
+### E4z gate retrained on L-Town
+
+| method | lambda | n_targets | n_accepted | harm_rate_among_accepted | harm_CP_hi | abstention_rate | mean_utility | share_oracle_captured |
+|---|---|---|---|---|---|---|---|---|
+| retrained gate a=0.10 |  | 35 | 0 | 0.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+| retrained gate a=0.20 | 0.048 | 35 | 12 | 0.000 | 0.265 | 0.657 | 0.567 | 0.269 |
+
+### E4z ungated policies
+
+| method | mean_utility | harm_rate | abstention_rate |
+|---|---|---|---|
+| B0 fresh | 0.000 | 0.000 | 1.000 |
+| B1 nearest | 1.012 | 0.114 | 0.000 |
+| B2 similarity top-1 | 1.196 | 0.114 | 0.000 |
+| B5 historical | 1.233 | 0.086 | 0.029 |
+| M5 retrained ungated | 1.536 | 0.086 | 0.000 |
+
 ## T4 sensitivity (no retuning)
 
 | factor | value | harm_share_all_pairs | lambda | n_accepted | harm_rate_among_accepted | abstention_rate | mean_utility | mean_U | share_helpful | share_harmful | mean_TG | spearman_vs_base |

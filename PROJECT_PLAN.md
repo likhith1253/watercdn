@@ -29,7 +29,7 @@ predictors · C4 zero-shot vs probe · C5 open benchmark + break-even.
 | P4 | predictors, tier ablation, order test, leakage audit, importance | done (D-012) |
 | P5 | gate, re-splits, trade-off, operator check, probe mode, final test evaluation | done |
 | P6 | baselines B0–B7 + oracle, adaptation table | done |
-| P7 | E2 goal, E3 layout, E4 L-Town (zero-shot, recalibrated, retrained), sensitivity | done (E4 lean, D-013) |
+| P7 | E2 goal, E3 layout, E4 L-Town (zero-shot, recalibrated, retrained), sensitivity | done (E4 lean, D-013; E4z test split extended to 35 targets) |
 | P8 | statistics, figures, amortisation, release package, cross-check | done except external deposit (Zenodo DOI) and second-machine test |
 | P9 | manuscript | out of scope of the autonomous build (results and figures are prepared for it) |
 

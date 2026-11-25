@@ -1,0 +1,56 @@
+{
+  "audit": {
+    "sources_in_library": true,
+    "targets_not_in_library": true,
+    "pair_split_matches_target": true,
+    "no_target_used_as_source": true,
+    "warm_runs_use_library_sources": true,
+    "splits_disjoint": true,
+    "all_passed": true
+  },
+  "quality": {
+    "n_pairs": 585,
+    "n_targets": 195,
+    "share_helpful_U_gt_eps": 0.6051282051282051,
+    "share_neutral": 0.2324786324786325,
+    "share_harmful_U_lt_minus_eps": 0.1623931623931624,
+    "U_mean": 0.6354878902705959,
+    "U_median": 0.828627256824171,
+    "U_std_across_pairs": 2.3695074135824092,
+    "U_se_median": 0.5642555188427979,
+    "noise_floor_ratio_se_over_spread": 0.23813199131954252,
+    "harm_by_split": {
+      "calibration": 0.1619047619047619,
+      "test": 0.1619047619047619,
+      "train": 0.16296296296296298
+    },
+    "harm_by_distance_band": {
+      "far": 0.2205128205128205,
+      "mid": 0.18461538461538463,
+      "near": 0.08205128205128205
+    },
+    "U_by_distance_band": {
+      "far": 0.4449727343343562,
+      "mid": 0.3893593672812362,
+      "near": 1.072131569196195
+    },
+    "infeasible_run_share": 0.05833333333333335,
+    "infeasible_fresh_run_share": 0.05769230769230771,
+    "failed_simulations": 15,
+    "wall_s_per_run_median": 58.137865099997725,
+    "wall_s_total_runs": 226386.1987266991,
+    "unattainable_target_share": 0.06153846153846154,
+    "fresh_feasible_share_on_attainable_targets": 0.9986338797814208,
+    "median_remaining_regret_B_vs_5B_all_scenarios": 0.07181647883444897
+  },
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "a0618f940ba3",
+    "config_hash": "333fa981444f"
+  },
+  "base_config": "configs/e4y.yaml",
+  "base_results": "results/e4y",
+  "scenario_count": 215,
+  "manifest_pair_count": 585
+}

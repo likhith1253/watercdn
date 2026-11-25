@@ -1,0 +1,195 @@
+{
+  "experiment": "E4",
+  "accuracy": [
+    {
+      "experiment": "E4",
+      "group": "all",
+      "n_pairs": 585,
+      "harm_share": 0.1623931623931624,
+      "U_mean": 0.6354878902705959,
+      "spearman": 0.10775849409275805,
+      "auroc": 0.5857142857142857,
+      "mae": 1.6455953941730261
+    }
+  ],
+  "gate": [
+    {
+      "experiment": "E4",
+      "group": "all",
+      "lambda_source": "frozen E1",
+      "alpha": 0.1,
+      "lambda": 0.022323966491655196,
+      "n_targets": 35,
+      "n_accepted": 35,
+      "abstention_rate": 0.0,
+      "harm_rate_among_accepted": 0.02857142857142857,
+      "n_harm_accepted": 1,
+      "mean_utility": 1.4582464024179116,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 0.6544476126316341,
+      "share_oracle_captured": 0.6902307632010374,
+      "joint_harm_rate": 0.02857142857142857,
+      "harm_CP_lo": 0.0007231043763380954,
+      "harm_CP_hi": 0.14917207965643164,
+      "harm_le_alpha": true
+    },
+    {
+      "experiment": "E4",
+      "group": "all",
+      "lambda_source": "recalibrated",
+      "alpha": 0.1,
+      "lambda": NaN,
+      "n_targets": 35,
+      "n_accepted": 0,
+      "abstention_rate": 1.0,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.0,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 2.112694015049545,
+      "share_oracle_captured": 0.0,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 1.0,
+      "harm_le_alpha": true
+    },
+    {
+      "experiment": "E4",
+      "group": "all",
+      "lambda_source": "frozen E1",
+      "alpha": 0.2,
+      "lambda": 0.022323966491655196,
+      "n_targets": 35,
+      "n_accepted": 35,
+      "abstention_rate": 0.0,
+      "harm_rate_among_accepted": 0.02857142857142857,
+      "n_harm_accepted": 1,
+      "mean_utility": 1.4582464024179116,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 0.6544476126316341,
+      "share_oracle_captured": 0.6902307632010374,
+      "joint_harm_rate": 0.02857142857142857,
+      "harm_CP_lo": 0.0007231043763380954,
+      "harm_CP_hi": 0.14917207965643164,
+      "harm_le_alpha": true
+    },
+    {
+      "experiment": "E4",
+      "group": "all",
+      "lambda_source": "recalibrated",
+      "alpha": 0.2,
+      "lambda": NaN,
+      "n_targets": 35,
+      "n_accepted": 0,
+      "abstention_rate": 1.0,
+      "harm_rate_among_accepted": 0.0,
+      "n_harm_accepted": 0,
+      "mean_utility": 0.0,
+      "oracle_mean_utility": 2.112694015049545,
+      "regret_to_oracle": 2.112694015049545,
+      "share_oracle_captured": 0.0,
+      "joint_harm_rate": 0.0,
+      "harm_CP_lo": 0.0,
+      "harm_CP_hi": 1.0,
+      "harm_le_alpha": true
+    }
+  ],
+  "provenance": {
+    "wntr_version": "1.5.0",
+    "epanet_version": "2.2 (bundled with WNTR)",
+    "git_commit": "a0618f940ba3",
+    "config_hash": "333fa981444f"
+  },
+  "few_shot": [
+    {
+      "group": "all",
+      "alpha": 0.1,
+      "m": 5,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.1,
+      "m": 10,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.1,
+      "m": 15,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.1,
+      "m": 20,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.1,
+      "m": 30,
+      "mean_harm": 0.002030987394957983,
+      "mean_utility": 0.10070569969572483,
+      "never_transfer": 0.93,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.2,
+      "m": 5,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.2,
+      "m": 10,
+      "mean_harm": 0.0,
+      "mean_utility": 0.0,
+      "never_transfer": 1.0,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.2,
+      "m": 15,
+      "mean_harm": 0.007049270723306008,
+      "mean_utility": 0.32772442588493533,
+      "never_transfer": 0.765,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.2,
+      "m": 20,
+      "mean_harm": 0.009143558071114425,
+      "mean_utility": 0.37078058565256566,
+      "never_transfer": 0.72,
+      "share_le_alpha": 1.0
+    },
+    {
+      "group": "all",
+      "alpha": 0.2,
+      "m": 30,
+      "mean_harm": 0.010271799385610125,
+      "mean_utility": 0.3027593325020158,
+      "never_transfer": 0.745,
+      "share_le_alpha": 1.0
+    }
+  ]
+}
