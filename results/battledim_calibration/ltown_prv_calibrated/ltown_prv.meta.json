@@ -1,0 +1,59 @@
+{
+  "name": "ltown_prv",
+  "source": "ltown_battledim_calibrated.inp (BattLeDIM-derived; EUPL-1.2)",
+  "source_url": "https://zenodo.org/records/4017659",
+  "source_sha256": "3399d0440b8b5e7c8e03947bdd54d193f0d287f7183585bbf098d72a032d4934",
+  "inp_sha256": "24ae382c81eb8ebd49d407b4ca37953287e3c01490a817e3207555be341b98bb",
+  "wntr_version": "1.5.0",
+  "edits": {
+    "controls_removed": true,
+    "closed_pipes": [],
+    "prvs": []
+  },
+  "zones": {
+    "PRV-3": [
+      "n205",
+      "n206",
+      "n207",
+      "n208",
+      "n209",
+      "n210",
+      "n211",
+      "n212",
+      "n213",
+      "n215",
+      "n216",
+      "n217",
+      "n226",
+      "n227",
+      "n231",
+      "n233",
+      "n234",
+      "n236",
+      "n237",
+      "n242",
+      "n243",
+      "n246",
+      "n247",
+      "n253",
+      "n254",
+      "n337",
+      "n623",
+      "n624",
+      "n625",
+      "n626",
+      "n667"
+    ]
+  },
+  "pumps": [
+    "PUMP_1"
+  ],
+  "prvs": [
+    "PRV-1",
+    "PRV-2",
+    "PRV-3"
+  ],
+  "required_pressure_m": 20.0,
+  "bulk_nodes": [],
+  "residential_pattern": "P-Residential"
+}

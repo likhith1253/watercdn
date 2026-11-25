@@ -204,7 +204,7 @@ LTOWN_URL = ("https://media.githubusercontent.com/media/KIOS-Research/BattLeDIM/
              "Dataset%20Generator/L-TOWN_v2_Model.inp")
 
 
-def build_ltown_prv(out_dir: str | Path) -> Path:
+def build_ltown_prv(out_dir: str | Path, source_model: str | Path | None = None) -> Path:
     """Edited L-Town (BattLeDIM, EUPL-1.2) for E4.
 
     L-Town already has one pump and three PRVs, so no valves are added. Edits:
@@ -213,7 +213,8 @@ def build_ltown_prv(out_dir: str | Path) -> Path:
     zones are the source-free components created by removing each PRV.
     """
     out_dir = Path(out_dir)
-    src = out_dir / LTOWN_FILE
+    out_dir.mkdir(parents=True, exist_ok=True)
+    src = Path(source_model) if source_model is not None else out_dir / LTOWN_FILE
     if not src.exists():
         raise FileNotFoundError(f"download L-Town first: {LTOWN_URL} -> {src}")
     wn = wntr.network.WaterNetworkModel(str(src))
@@ -243,7 +244,10 @@ def build_ltown_prv(out_dir: str | Path) -> Path:
     inp = out_dir / "ltown_prv.inp"
     wntr.network.write_inpfile(wn, str(inp), units="LPS", version=2.2)
     meta = {
-        "name": "ltown_prv", "source": "BattLeDIM L-TOWN_v2_Model.inp (EUPL-1.2)", "source_url": LTOWN_URL,
+        "name": "ltown_prv",
+        "source": ("BattLeDIM L-TOWN_v2_Model.inp (EUPL-1.2)" if source_model is None
+                   else f"{src.name} (BattLeDIM-derived; EUPL-1.2)"),
+        "source_url": ("https://zenodo.org/records/4017659" if source_model is not None else LTOWN_URL),
         "source_sha256": file_sha256(src), "inp_sha256": file_sha256(inp), "wntr_version": wntr.__version__,
         "edits": {"controls_removed": True, "closed_pipes": [], "prvs": []},
         "zones": {k: v for k, v in zones.items() if v},

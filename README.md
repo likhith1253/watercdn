@@ -132,6 +132,10 @@ The proposed next validation step using the public BattLeDIM historical L-Town m
 chronological calibration and validation periods, checks the nominal EPANET model before tuning, and distinguishes
 model-based evaluation from real operational deployment.
 
+Run `python scripts/calibrate_battledim.py` to download and checksum the required public files, fit the initial
+nominal-model calibration, and regenerate the held-out report and calibrated EPANET input under
+`results/battledim_calibration/`.
+
 ## Licence
 
 Code: MIT (see `LICENSE`). L-Town derived files: EUPL-1.2 (BattLeDIM). Net3: public domain (EPANET examples).
