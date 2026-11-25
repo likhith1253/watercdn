@@ -2,8 +2,8 @@
   "name": "ltown_prv",
   "source": "ltown_battledim_calibrated.inp (BattLeDIM-derived; EUPL-1.2)",
   "source_url": "https://zenodo.org/records/4017659",
-  "source_sha256": "3399d0440b8b5e7c8e03947bdd54d193f0d287f7183585bbf098d72a032d4934",
-  "inp_sha256": "24ae382c81eb8ebd49d407b4ca37953287e3c01490a817e3207555be341b98bb",
+  "source_sha256": "8ce0e174252c4e3553a54004cf53bd22f3c39e56ba9ad30a06132ac8dd1496d2",
+  "inp_sha256": "4d0555138a3ed55587813cd40cca285807459950822b60e8ba99f536351cd1c7",
   "wntr_version": "1.5.0",
   "edits": {
     "controls_removed": true,

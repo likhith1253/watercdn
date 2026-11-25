@@ -1,7 +1,8 @@
 """Fit and validate the nominal BattLeDIM L-Town EPANET model against 2018 SCADA.
 
-This reproducible first-pass calibration uses only the known leak-free interval
-at the start of 2018. It fits global demand and pipe-roughness multipliers on
+This reproducible first-pass calibration uses only the interval before the
+first reported leak in 2018. Undocumented leaks cannot be ruled out. It fits
+global demand and pipe-roughness multipliers on
 Jan 1-5 and reports held-out Jan 6-7 scores. It does not calibrate the edited
 ltown_prv optimization network or claim validation of unobserved interventions.
 """
@@ -10,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -61,9 +63,19 @@ def read_scada(path: Path) -> pd.DataFrame:
     return df.set_index("Timestamp").sort_index()
 
 
+def scada_flow_to_lps(flow_m3h: pd.DataFrame) -> pd.DataFrame:
+    """Convert BattLeDIM flow-meter units (m3/h) to L/s."""
+    return flow_m3h / 3.6
+
+
+def wntr_flow_to_lps(flow_m3s: pd.DataFrame) -> pd.DataFrame:
+    """Convert WNTR's SI simulation result units (m3/s) to SCADA units (L/s)."""
+    return flow_m3s * 1000.0
+
+
 def load_observations(data: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     pressure = read_scada(data / "2018_SCADA_Pressures.csv")
-    flow = read_scada(data / "2018_SCADA_Flows.csv") / 3.6  # m3/h -> L/s
+    flow = scada_flow_to_lps(read_scada(data / "2018_SCADA_Flows.csv"))
     levels = read_scada(data / "2018_SCADA_Levels.csv")
     hourly = pd.date_range(START, END, freq="h", inclusive="left")
     def hourly_frame(frame: pd.DataFrame) -> pd.DataFrame:
@@ -72,20 +84,26 @@ def load_observations(data: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
 
 
 def simulate(inp: Path, demand_scale: float, roughness_scale: float) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    inp = Path(inp).resolve()
     wn = wntr.network.WaterNetworkModel(str(inp))
     wn.options.time.duration = int((END - START).total_seconds())
     wn.options.time.hydraulic_timestep = 3600
     wn.options.time.report_timestep = 3600
-    wn.options.time.pattern_timestep = 3600
+    # Keep the model's native 5-minute pattern interval. Overriding this to
+    # hourly makes EPANET advance through only every 12th demand multiplier.
     wn.options.time.pattern_start = 0
     wn.options.hydraulic.demand_multiplier = float(demand_scale)
     for _, pipe in wn.pipes():
         pipe.roughness *= float(roughness_scale)
-    result = wntr.sim.EpanetSimulator(wn).run_sim()
+    # EPANET writes scratch .inp/.bin/.rpt files. Isolate them so a calibration
+    # run leaves the project clean and concurrent runs do not collide.
+    with tempfile.TemporaryDirectory(prefix="battledim_epanet_") as scratch:
+        result = wntr.sim.EpanetSimulator(wn).run_sim(file_prefix=str(Path(scratch) / "epanet"))
     idx = pd.date_range(START, END, freq="h", inclusive="left")
     # EPANET results use seconds from simulation start; use hourly points only.
     pressure = result.node["pressure"].reindex(range(0, len(idx) * 3600, 3600)).set_axis(idx)
-    flow = result.link["flowrate"].reindex(range(0, len(idx) * 3600, 3600)).set_axis(idx)
+    # WNTR result tables use SI m3/s internally; compare to SCADA in L/s.
+    flow = wntr_flow_to_lps(result.link["flowrate"].reindex(range(0, len(idx) * 3600, 3600)).set_axis(idx))
     # EPANET reports tank water surface as head; subtract the tank's bottom elevation.
     level = result.node["head"].reindex(range(0, len(idx) * 3600, 3600)).set_axis(idx)
     for tank in wn.tank_name_list:
@@ -122,6 +140,7 @@ def main() -> None:
     args = ap.parse_args()
     inp = args.data_dir / "L-TOWN.inp"
     ensure_dataset(args.data_dir)
+    pattern_timestep_seconds = int(wntr.network.WaterNetworkModel(str(inp)).options.time.pattern_timestep)
     obs_p, obs_f, obs_l = load_observations(args.data_dir)
     sensor_cfg = yaml.safe_load((args.data_dir / "dataset_configuration.yaml").read_text(encoding="utf-8"))
     fit_mask = np.asarray(obs_p.index < FIT_END)
@@ -131,15 +150,24 @@ def main() -> None:
     fnames = [s for s in sensor_cfg["flow_sensors"] if s in obs_f]
     lnames = [s for s in sensor_cfg["level_sensors"] if s in obs_l]
 
-    def evaluate(x: np.ndarray, mask: np.ndarray) -> tuple[float, dict]:
+    def evaluate(x: np.ndarray, mask: np.ndarray) -> tuple[float, dict, dict]:
         p, f, l = simulate(inp, float(x[0]), float(x[1]))
-        pieces = [(sensor_rmse(p, obs_p, pnames, mask), obs_p, pnames),
-                  (sensor_rmse(f, obs_f, fnames, mask), obs_f, fnames),
-                  (sensor_rmse(l, obs_l, lnames, mask), obs_l, lnames)]
-        per_sensor = {k: v for d, _, _ in pieces for k, v in d.items()}
+        pieces = {
+            "pressure": (sensor_rmse(p, obs_p, pnames, mask), obs_p, pnames),
+            "flow": (sensor_rmse(f, obs_f, fnames, mask), obs_f, fnames),
+            "tank_level": (sensor_rmse(l, obs_l, lnames, mask), obs_l, lnames),
+        }
+        per_sensor = {k: v for d, _, _ in pieces.values() for k, v in d.items()}
         # Equal weight per sensor type, then equal weight among sensors in type.
-        type_scores = [composite(d, frame, names, mask) for d, frame, names in pieces if d]
-        return (float(np.mean(type_scores)), per_sensor)
+        by_type = {
+            label: {
+                "normalized_rmse": composite(scores, frame, names, mask),
+                "mean_rmse": float(np.mean(list(scores.values()))) if scores else None,
+                "sensor_count": len(scores),
+            }
+            for label, (scores, frame, names) in pieces.items() if scores
+        }
+        return (float(np.mean([v["normalized_rmse"] for v in by_type.values()])), per_sensor, by_type)
 
     cache: dict[tuple[float, float], float] = {}
     def objective(x: np.ndarray) -> float:
@@ -151,10 +179,10 @@ def main() -> None:
     # Bounds express deliberately narrow, physically plausible deviations from nominal.
     fit = differential_evolution(objective, [(0.90, 1.10), (0.90, 1.10)], seed=20261125,
                                  maxiter=args.maxiter, popsize=4, polish=True, workers=1)
-    nominal_train, nominal_train_by = evaluate(np.array([1.0, 1.0]), fit_mask)
-    nominal_valid, nominal_valid_by = evaluate(np.array([1.0, 1.0]), valid_mask)
-    fit_train, fit_train_by = evaluate(fit.x, fit_mask)
-    fit_valid, fit_valid_by = evaluate(fit.x, valid_mask)
+    nominal_train, nominal_train_by, nominal_train_types = evaluate(np.array([1.0, 1.0]), fit_mask)
+    nominal_valid, nominal_valid_by, nominal_valid_types = evaluate(np.array([1.0, 1.0]), valid_mask)
+    fit_train, fit_train_by, fit_train_types = evaluate(fit.x, fit_mask)
+    fit_valid, fit_valid_by, fit_valid_types = evaluate(fit.x, valid_mask)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     calibrated_inp = args.out_dir / "ltown_battledim_calibrated.inp"
     calibrated_wn = wntr.network.WaterNetworkModel(str(inp))
@@ -180,25 +208,33 @@ def main() -> None:
         "source_model_sha256": hashlib.sha256(inp.read_bytes()).hexdigest(),
         "calibrated_model": calibrated_inp.name,
         "calibrated_model_sha256": calibrated_sha,
-        "calibrated_optimizer_network": str(calibrated_prv_inp.relative_to(ROOT)),
-        "calibrated_optimizer_metadata": str(calibrated_prv_meta.relative_to(ROOT)),
+        "calibrated_optimizer_network": calibrated_prv_inp.relative_to(args.out_dir).as_posix(),
+        "calibrated_optimizer_metadata": calibrated_prv_meta.relative_to(args.out_dir).as_posix(),
         "calibrated_optimizer_network_sha256": hashlib.sha256(calibrated_prv_inp.read_bytes()).hexdigest(),
         "wntr_version": wntr.__version__, "epanet_version": "2.2",
+        "model_pattern_timestep_seconds": pattern_timestep_seconds,
         "time_window": {"start": str(START), "end_exclusive": str(END), "fit_end": str(FIT_END)},
         "hourly_samples": int(len(obs_p)),
-        "scada_units": {"pressure": "m", "flow_input": "m3/h (converted to L/s)", "tank_level": "m"},
+        "scada_units": {"pressure": "m", "flow_input": "m3/h (converted to L/s)",
+                        "wntr_flow_output": "m3/s (converted to L/s)", "tank_level": "m"},
         "fit_parameters": {"demand_multiplier": float(fit.x[0]), "global_pipe_roughness_multiplier": float(fit.x[1])},
         "normalized_rmse_equal_sensor_type": {
             "nominal": {"fit": nominal_train, "heldout": nominal_valid},
             "calibrated": {"fit": fit_train, "heldout": fit_valid},
+        },
+        "rmse_by_sensor_type": {
+            "nominal_fit": nominal_train_types, "nominal_heldout": nominal_valid_types,
+            "calibrated_fit": fit_train_types, "calibrated_heldout": fit_valid_types,
         },
         "rmse_by_sensor": {
             "nominal_fit": nominal_train_by, "calibrated_fit": fit_train_by,
             "nominal_heldout": nominal_valid_by, "calibrated_heldout": fit_valid_by,
         },
         "optimizer": {"name": "scipy differential_evolution", "seed": 20261125,
-                       "maxiter": args.maxiter, "evaluations": int(fit.nfev)},
-        "interpretation": "First-pass calibration on the leak-free Jan 1-5 interval; held-out Jan 6-7. Not evidence for unseen control actions. Normalized errors remain large, so use as an initial calibration only.",
+                       "maxiter": args.maxiter, "iterations": int(fit.nit),
+                       "converged": bool(fit.success), "termination_message": str(fit.message),
+                       "evaluations": int(fit.nfev)},
+        "interpretation": "Initial two-parameter fit on the pre-first-reported-leak Jan 1-5 interval; undocumented leaks cannot be ruled out. Jan 6-7 is held out. Inspect per-sensor-type metrics because the aggregate can mask group-specific residuals. Not evidence for unseen control actions.",
     }
     (args.out_dir / "calibration_report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report["normalized_rmse_equal_sensor_type"], indent=2))
