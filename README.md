@@ -125,6 +125,13 @@ networks, guarantee relative to the finite-repeat harm label and to exchangeabil
 authors') baselines, cheap simulations (the study claims evaluation efficiency, not wall-clock savings of
 expensive simulators).
 
+## Real-network calibration extension
+
+The proposed next validation step using the public BattLeDIM historical L-Town measurements is documented in
+[`docs/battledim_calibration.md`](docs/battledim_calibration.md). It keeps the source data out of Git, separates
+chronological calibration and validation periods, checks the nominal EPANET model before tuning, and distinguishes
+model-based evaluation from real operational deployment.
+
 ## Licence
 
 Code: MIT (see `LICENSE`). L-Town derived files: EUPL-1.2 (BattLeDIM). Net3: public domain (EPANET examples).
